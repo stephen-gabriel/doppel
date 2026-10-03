@@ -8,7 +8,8 @@
     "replay": "node --experimental-strip-types src/cli.ts"
   },
   "dependencies": {
-    "@doppel/engine": "workspace:*"
+    "@doppel/engine": "workspace:*",
+    "@doppel/sources": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

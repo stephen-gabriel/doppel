@@ -1,6 +1,52 @@
 {
   "version": 1,
-  "capturedAt": null,
-  "snapshot": null,
-  "note": "No verified mainnet monitor capture has been recorded yet. This empty bundle is intentional; replay fixtures must not be presented as captured live attacks."
+  "capturedAt": 1791061447354,
+  "snapshot": {
+    "version": 1,
+    "sessionId": "80c63c9d-6a74-4530-b6f9-ae4500662dbf",
+    "source": {
+      "cluster": "mainnet-beta",
+      "origin": "chain",
+      "mode": "historical",
+      "provider": "public-rpc"
+    },
+    "state": "stopped",
+    "startedAt": 1791061408270,
+    "heartbeatAt": 1791061410276,
+    "watchCount": 1,
+    "assets": [
+      "SOL",
+      "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+    ],
+    "historyWindowHours": 720,
+    "coverage": "partial",
+    "warnings": [
+      "Captured from live mainnet public RPC at 2026-10-03T21:02:55.587Z; last observed slot 303463012.",
+      "Only the configured wallets and retained supported transfers are evaluated; no network-wide coverage.",
+      "Historical coverage and stream recovery must be independently verified."
+    ],
+    "metrics": {
+      "received": 216,
+      "retained": 17,
+      "duplicates": 0,
+      "ignored": 197,
+      "evicted": 2,
+      "reconnects": 0,
+      "restarts": 0,
+      "lastSlot": 303463012,
+      "cursor": 0,
+      "processingSamples": 216,
+      "processingMeanMs": 1.1251333333333673
+    },
+    "gaps": [
+      {
+        "id": 1,
+        "reason": "Retention limit removed history; earlier relationships may be missing.",
+        "openedAt": 1791061410117,
+        "recoveredAt": null
+      }
+    ],
+    "findings": []
+  },
+  "note": "Operator-exported historical mainnet snapshot. Inspect provenance and source before publishing; not current activity."
 }

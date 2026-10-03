@@ -90,6 +90,9 @@ importers:
       '@doppel/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      '@doppel/sources':
+        specifier: workspace:*
+        version: link:../../packages/sources
     devDependencies:
       '@types/node':
         specifier: ^24.10.1

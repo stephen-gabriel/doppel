@@ -61,3 +61,17 @@ test("judging mode presents durable captures as historical and leaves address ch
   await page.getByRole("navigation", { name: "Primary", exact: true }).getByRole("link", { name: "Check an address" }).click();
   await expect(page.getByRole("textbox", { name: "Your wallet address", exact: true })).toBeVisible();
 });
+
+test("deployed monitor serves the real bundled mainnet capture with no worker running", async ({ page, request }) => {
+  const payload = await (await request.get("/api/monitor")).json();
+  expect(payload.status).toBe("captured");
+  expect(payload.snapshot.source.origin).toBe("chain");
+  expect(payload.snapshot.source.cluster).toBe("mainnet-beta");
+  expect(payload.snapshot.source.mode).toBe("historical");
+  expect(payload.snapshot.state).toBe("stopped");
+  expect(payload.snapshot.metrics.retained).toBeGreaterThan(0);
+  expect(payload.snapshot.metrics.lastSlot).toBeGreaterThan(0);
+  await page.goto("/monitor");
+  await expect(page.getByText("Captured mainnet observations · not live", { exact: true })).toBeVisible();
+  await expect(page.getByText("Live chain monitoring", { exact: true })).toHaveCount(0);
+});

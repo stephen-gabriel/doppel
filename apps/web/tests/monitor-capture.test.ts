@@ -23,6 +23,17 @@ describe("deployment-bundled historical monitor", () => {
   });
   it("handles missing or malformed captures without inventing results", () => {
     expect(capturedMonitorResponse({})).toBeNull();
-    expect(monitorUnavailable("Worker unavailable.").status).toBe("offline");
+    expect(capturedMonitorResponse({ version: 1, capturedAt: 1000, snapshot: { garbage: true } })).toBeNull();
+  });
+  it("serves the bundled mainnet capture as historical evidence, never as live activity", () => {
+    const result = monitorUnavailable("Worker unavailable.");
+    expect(result.status).toBe("captured");
+    if (result.status !== "captured") return;
+    expect(result.snapshot.source.origin).toBe("chain");
+    expect(result.snapshot.source.cluster).toBe("mainnet-beta");
+    expect(result.snapshot.source.mode).toBe("historical");
+    expect(result.snapshot.state).toBe("stopped");
+    expect(result.snapshot.metrics.retained).toBeGreaterThan(0);
+    expect(result.message).toMatch(/not current activity/i);
   });
 });
