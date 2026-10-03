@@ -1,0 +1,28 @@
+{
+  "name": "doppel",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Recipient verification for repeat Solana payments",
+  "packageManager": "pnpm@10.18.2",
+  "scripts": {
+    "dev": "pnpm --filter @doppel/web dev",
+    "build": "pnpm -r --if-present build",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "evaluate": "node --experimental-strip-types tools/evaluation/run.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.37.0",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.37.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.1",
+    "@playwright/test": "^1.55.1",
+    "jsdom": "^27.0.0",
+    "vitest": "^4.0.3"
+  }
+}

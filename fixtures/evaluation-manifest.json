@@ -1,0 +1,267 @@
+{
+  "ruleVersion": "0.1",
+  "createdAt": "2026-10-02",
+  "notes": "Address-pair cases use published or synthetic strings only. No historical signatures, timestamps, or amounts are invented. Reconstruction of the Pine Analytics November 2024 incident is unresolved. Cases previously labelled holdout and executed in M0 development tests were reclassified to development on 2 Oct 2026. A separate final-evaluation set in fixtures/final-evaluation-manifest.json is reserved for M4 and must not be used to tune v0.1.",
+  "cases": [
+    {
+      "id": "DEV-PAIR-PINE-4PLUS1",
+      "purpose": "Published 4+1 resemblance regression",
+      "sourceUrl": "https://pineanalytics.substack.com/p/solana-account-dusting-and-address",
+      "sourceDate": "2025-04-24",
+      "cluster": "mainnet-beta",
+      "origin": "chain",
+      "kind": "address-pair",
+      "expectedFact": "candidate_resemblance",
+      "expectedPattern": null,
+      "labelConfidence": "source-reported-addresses",
+      "addresses": {
+        "reportedVictim": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "reportedSpoof": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY",
+        "reportedReal": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY"
+      },
+      "eventReferences": [],
+      "requestedHistory": null,
+      "availableHistory": "addresses_only",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": [
+        "Mechanical prefix/suffix check only.",
+        "Does not reconstruct a transaction sequence.",
+        "Reported real is the source designation, not a verified current recipient."
+      ]
+    },
+    {
+      "id": "DEV-PAIR-SYN-1PLUS4",
+      "purpose": "Generated 1+4 asymmetric resemblance",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "address-pair",
+      "expectedFact": "candidate_resemblance",
+      "expectedPattern": null,
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "seed": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "generatedAtRuntime": true
+      },
+      "eventReferences": [],
+      "requestedHistory": null,
+      "availableHistory": "none",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": ["Synthetic encoding pair; not an incident."]
+    },
+    {
+      "id": "DEV-CONT-EXACT",
+      "purpose": "Saved recipient exact match",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "continuity_exact",
+      "expectedPattern": "none_observed",
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "sender": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "saved": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "destination": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY"
+      },
+      "eventReferences": [],
+      "requestedHistory": "empty_complete_within_scope",
+      "availableHistory": "empty",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": ["Exact continuity is not an identity guarantee."]
+    },
+    {
+      "id": "DEV-CONT-MISMATCH",
+      "purpose": "Saved recipient changed to lookalike destination",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "continuity_mismatch",
+      "expectedPattern": null,
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "saved": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "destination": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY"
+      },
+      "eventReferences": [],
+      "requestedHistory": null,
+      "availableHistory": "none",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": ["Mismatch must pause regardless of resemblance."]
+    },
+    {
+      "id": "DEV-PAT-RESEMBLANCE-ONLY",
+      "purpose": "Lookalike without contextual sequence",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "resemblance_only",
+      "expectedPattern": "resemblance_only",
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "sender": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "destination": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY"
+      },
+      "eventReferences": [],
+      "requestedHistory": "synthetic",
+      "availableHistory": "synthetic",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": ["Similarity is not maliciousness."]
+    },
+    {
+      "id": "DEV-PAT-SEQUENCE",
+      "purpose": "Outgoing A then dust lookalike B within window",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "suspected_poisoning",
+      "expectedPattern": "suspected_poisoning",
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "sender": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "real": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "spoof": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY"
+      },
+      "eventReferences": ["synthetic:pay-real", "synthetic:dust-spoof"],
+      "requestedHistory": "synthetic",
+      "availableHistory": "synthetic",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": ["Logical sequence only; not a live incident."]
+    },
+    {
+      "id": "DEV-PAT-INCOMING-FIRST",
+      "purpose": "Incoming dust precedes reference payment",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "no_fabricated_sequence",
+      "expectedPattern": "resemblance_only",
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "sender": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "real": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "spoof": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY"
+      },
+      "eventReferences": ["synthetic:dust-first", "synthetic:pay-later"],
+      "requestedHistory": "synthetic",
+      "availableHistory": "synthetic",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": []
+    },
+    {
+      "id": "DEV-COV-UNAVAILABLE",
+      "purpose": "Unavailable history is unknown, not safe",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "pattern_unknown",
+      "expectedPattern": "unknown",
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "sender": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "destination": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY"
+      },
+      "eventReferences": [],
+      "requestedHistory": "unavailable",
+      "availableHistory": "none",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": ["Empty evidence is not verified safety."]
+    },
+    {
+      "id": "DEV-CONT-UNRELATED-MISMATCH",
+      "purpose": "Unrelated destination mismatch without resemblance (reclassified from M0 holdout)",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "continuity_mismatch",
+      "expectedPattern": null,
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "saved": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "destination": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc"
+      },
+      "eventReferences": [],
+      "requestedHistory": null,
+      "availableHistory": "none",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "reclassifiedFrom": "HOLD-CONT-UNRELATED-MISMATCH",
+      "limitations": ["Executed during M0 development tests; no longer an independent holdout."]
+    },
+    {
+      "id": "DEV-PAT-OUTSIDE-WINDOW",
+      "purpose": "Lookalike contact outside 48h window remains resemblance_only (reclassified from M0 holdout)",
+      "sourceUrl": null,
+      "sourceDate": "2026-10-02",
+      "cluster": "local-test",
+      "origin": "synthetic",
+      "kind": "synthetic-sequence",
+      "expectedFact": "detection_limitation",
+      "expectedPattern": "resemblance_only",
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "sender": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "real": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "spoof": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY"
+      },
+      "eventReferences": ["synthetic:pay-old", "synthetic:dust-late"],
+      "requestedHistory": "synthetic",
+      "availableHistory": "synthetic",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "reclassifiedFrom": "HOLD-PAT-OUTSIDE-WINDOW",
+      "limitations": [
+        "Provisional 48h window is an engineering starting point.",
+        "Executed during M0 development tests; no longer an independent holdout."
+      ]
+    },
+    {
+      "id": "UNRESOLVED-PINE-RECONSTRUCTION",
+      "purpose": "Historical chain reconstruction of the published incident",
+      "sourceUrl": "https://pineanalytics.substack.com/p/solana-account-dusting-and-address",
+      "sourceDate": "2025-04-24",
+      "cluster": "mainnet-beta",
+      "origin": "chain",
+      "kind": "historical-chain-reconstruction",
+      "expectedFact": "unresolved",
+      "expectedPattern": null,
+      "labelConfidence": "unresolved",
+      "addresses": {
+        "reportedVictim": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+        "reportedSpoof": "4yfuQCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizcY",
+        "reportedReal": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY"
+      },
+      "eventReferences": [],
+      "requestedHistory": "not_fetched_in_m0",
+      "availableHistory": "unresolved",
+      "decisionCutoff": null,
+      "assignment": "development",
+      "limitations": [
+        "No signatures were invented.",
+        "M0 does not claim historical prevention."
+      ]
+    }
+  ]
+}

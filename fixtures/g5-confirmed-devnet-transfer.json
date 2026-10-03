@@ -1,0 +1,27 @@
+{
+  "evidenceType": "independently_verified_rpc_summary",
+  "cluster": "devnet",
+  "endpoint": "https://api.devnet.solana.com",
+  "method": "getTransaction",
+  "commitment": "confirmed",
+  "signature": "pufgEmeHtRRw9iSZTTRhRPbqijtFPTTcVg5wL5CQXiVgfq7DnxhJjD9LxWibs2tHREypX9KUBzhWF7H9uraGHk7",
+  "slot": 506784948,
+  "blockTime": 1790980236,
+  "transactionError": null,
+  "feeLamports": 80000,
+  "source": "DdtkWSr3Su5GGRsDF1AkMLdgkjMc4C1qnhCsaY9uDZes",
+  "destination": "7Q6rw1qXyZDTwcGHG9mban7Y1wa2wgxRGXXr7diiArqn",
+  "transferLamports": 1000000,
+  "senderPreBalanceLamports": 5000000000,
+  "senderPostBalanceLamports": 4998920000,
+  "recipientPreBalanceLamports": 0,
+  "recipientPostBalanceLamports": 1000000,
+  "programsInInstructionOrder": [
+    "ComputeBudget111111111111111111111111111111",
+    "ComputeBudget111111111111111111111111111111",
+    "11111111111111111111111111111111"
+  ],
+  "builderReportedWallet": "Phantom",
+  "builderReportedMismatchBlocked": true,
+  "limits": "RPC independently confirms successful SOL transfer and amounts. Wallet UI/mismatch behavior is builder-reported, supplemented by automated regression tests. Does not establish live USDC execution or mainnet sending."
+}

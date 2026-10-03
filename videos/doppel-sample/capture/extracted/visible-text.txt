@@ -1,0 +1,46 @@
+[a] Skip to content
+[span] Doppel
+[a] Check an address
+[a] Address book
+[a] Test a payment
+[a] How it works
+[p] Checks never move money
+[a] Check an address
+[a] Address book
+[a] Test a payment
+[a] How it works
+[h2] Start here: check an address without sending money
+[p] Save an address you trust in your
+[a] address book
+[p] , then compare it with the address you are about to pay. No wallet connection, SOL balance or transaction fee is needed.
+[button] See a matching example
+[button] See a lookalike example
+[a] Want to try a test payment?
+[h1] Check the recipient before you send.
+[p] Who did you intend to pay, and where would the money actually go?
+[label] Network
+[option] Real network · read-only
+[option] Test network · devnet
+[p] Solana’s real network is also called mainnet-beta. You can check it now; Doppel cannot send real funds.
+[label] Your wallet address
+[p] We read this wallet’s public payment history. Paste a public address, never a recovery phrase.
+[label] Who are you trying to pay?
+[option] Choose a saved recipient (optional)
+[p] This is the address you previously confirmed.
+[a] Save a recipient
+[p] if the list is empty. Without one, we can only inspect history.
+[label] Address you are about to pay
+[label] What would you send?
+[option] SOL
+[option] USDC
+[p] This only checks addresses. We look at both SOL and USDC history; no money will move.
+[button] Check address
+[button] Cancel
+[p] Check stopped or details changed. Run a fresh check.
+[p] Payment details changed. Check again before continuing.
+[h2] Your address comparison
+[p] Choose a saved recipient and paste the address you plan to pay. We will show whether the full addresses match.
+[h2] What we can tell you
+[p] No saved recipient selected. We can check history, but cannot compare against your intended recipient.
+[p] No chain lookup yet.
+[p] Doppel compares the address you plan to pay with your saved recipient and looks for suspicious lookalikes. It does not verify who owns an address or guarantee safety.

@@ -1,0 +1,72 @@
+{
+  "ruleVersion": "0.1",
+  "createdAt": "2026-10-02",
+  "evaluationPolicy": "Do not execute expected-outcome assertions for these cases during development or M1–M3 tuning. Freeze rule version, then evaluate once at M4. If a failure causes tuning, disclose that the case left the independent set.",
+  "notes": "Separate from development regressions. Not used as ground truth for live mainnet observations.",
+  "cases": [
+    {
+      "id": "FINAL-CONT-CROSS-CLUSTER",
+      "purpose": "Confirmed same address on a different cluster is not exact continuity",
+      "assignment": "final-evaluation",
+      "kind": "synthetic-sequence",
+      "origin": "synthetic",
+      "expectedFact": "continuity_cluster_mismatch",
+      "expectedPattern": null,
+      "labelConfidence": "synthetic",
+      "addresses": {
+        "saved": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY",
+        "destination": "4yfu48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY"
+      },
+      "eventReferences": [],
+      "limitations": ["Reserved for M4."]
+    },
+    {
+      "id": "FINAL-PAT-MISSING-BLOCKTIME",
+      "purpose": "Missing historical blockTime must not produce suspected_poisoning from observation time",
+      "assignment": "final-evaluation",
+      "kind": "synthetic-sequence",
+      "origin": "synthetic",
+      "expectedFact": "timing_unknown_not_suspected",
+      "expectedPattern": "resemblance_only",
+      "labelConfidence": "synthetic",
+      "eventReferences": [],
+      "limitations": ["Reserved for M4."]
+    },
+    {
+      "id": "FINAL-PAT-SYMBOL-NOT-MINT",
+      "purpose": "USDC symbol is not canonical mint dust",
+      "assignment": "final-evaluation",
+      "kind": "synthetic-sequence",
+      "origin": "synthetic",
+      "expectedFact": "unsupported_asset_not_dust",
+      "expectedPattern": "resemblance_only",
+      "labelConfidence": "synthetic",
+      "eventReferences": [],
+      "limitations": ["Reserved for M4."]
+    },
+    {
+      "id": "FINAL-REFUND-EXACT-A",
+      "purpose": "Small incoming from the exact previously paid address is not a lookalike attack",
+      "assignment": "final-evaluation",
+      "kind": "synthetic-sequence",
+      "origin": "synthetic",
+      "expectedFact": "not_lookalike_attack",
+      "expectedPattern": "none_observed",
+      "labelConfidence": "synthetic",
+      "eventReferences": [],
+      "limitations": ["Reserved for M4."]
+    },
+    {
+      "id": "FINAL-LARGE-INCOMING",
+      "purpose": "Lookalike incoming above dust remains resemblance_only",
+      "assignment": "final-evaluation",
+      "kind": "synthetic-sequence",
+      "origin": "synthetic",
+      "expectedFact": "detection_limitation",
+      "expectedPattern": "resemblance_only",
+      "labelConfidence": "synthetic",
+      "eventReferences": [],
+      "limitations": ["Reserved for M4."]
+    }
+  ]
+}

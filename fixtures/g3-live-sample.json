@@ -1,0 +1,42 @@
+{
+  "wallet": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc",
+  "provider": "public-rpc",
+  "coldMs": 5995,
+  "warmMs": 5426,
+  "firstStatus": "partial",
+  "secondStatus": "partial",
+  "fetched": 8,
+  "events": 119,
+  "unsupported": 1,
+  "unresolved": 0,
+  "warnings": [
+    "Token-account discovery lists currently owned accounts only; closed historical accounts are not recovered.",
+    "Reached the 8-transaction cap."
+  ],
+  "sample": [
+    {
+      "id": "mainnet-beta:3jDiGZYGRPG6vuspamJyYE4SBn2dYYHh7mii4wuFq4owVLtN8nXS5H1rHAH7fUiLdF531ZKxXJF1SoGvJnoPYhtb:0",
+      "asset": "SOL",
+      "resolution": "resolved",
+      "blockTime": 1732507285000,
+      "fromOwner": "AmUZyBLBMXbUzhNHJvTRE7fr39fse3UhjcrtRF66DG5d",
+      "toOwner": "5LbwC1ewY3Sca7T8CwzX9wsjvwMAHbdRo6SCQL8j7EWc"
+    },
+    {
+      "id": "mainnet-beta:3jDiGZYGRPG6vuspamJyYE4SBn2dYYHh7mii4wuFq4owVLtN8nXS5H1rHAH7fUiLdF531ZKxXJF1SoGvJnoPYhtb:1",
+      "asset": "SOL",
+      "resolution": "resolved",
+      "blockTime": 1732507285000,
+      "fromOwner": "AmUZyBLBMXbUzhNHJvTRE7fr39fse3UhjcrtRF66DG5d",
+      "toOwner": "DXMU5Xgs8Wc3qUKSSWwEv4mVnf1aEZ1FHL6JSQGjgo5"
+    },
+    {
+      "id": "mainnet-beta:5B5MpceKgBh7HfoLxqWpWYXsc2KLxr9DQtrAkeDyH29vChr6qX1yoeLbVCJqFGuAoTuD2jEEbsjHSSumYV1KgBSy:0",
+      "asset": "SOL",
+      "resolution": "resolved",
+      "blockTime": 1732507260000,
+      "fromOwner": "FLiPwTEKRGUp13TqMXh2Y8oVtYwRJC1r7paPYiBVAhNw",
+      "toOwner": "xTYeWoqq4QmhTssAigSXLay2V6Kak2jneaa1zh2e95x"
+    }
+  ]
+}

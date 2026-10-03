@@ -1,0 +1,108 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "32px",
+      "fontWeight": "500",
+      "lineHeight": "38px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": "Try a payment with test funds"
+    },
+    {
+      "role": "heading",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "16px",
+      "fontWeight": "500",
+      "lineHeight": "26px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": "Only the sending wallet needs test SOL first"
+    },
+    {
+      "role": "body",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "26px",
+      "letterSpacing": "normal",
+      "color": "#A3AAD0",
+      "sampleText": "Practice the full flow: choose who you intend to pay, check "
+    },
+    {
+      "role": "code",
+      "fontFamily": "JetBrains Mono",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "26px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": ""
+    }
+  ],
+  "spacing": {
+    "observed": [
+      8,
+      12,
+      16,
+      20,
+      32
+    ],
+    "baseUnit": 4
+  },
+  "radius": [
+    "12px"
+  ],
+  "shadows": [],
+  "buttons": [
+    {
+      "label": "Connect my test wallet",
+      "background": "#8F9CFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#0D1030",
+      "padding": "8px 20px",
+      "borderRadius": "12px",
+      "border": "0px solid rgb(13, 16, 48)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "500",
+      "height": "44px"
+    },
+    {
+      "label": "Cancel",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#ECEFFB",
+      "padding": "0px 16px",
+      "borderRadius": "12px",
+      "border": "1px solid rgb(46, 53, 98)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "44px"
+    }
+  ],
+  "cards": [],
+  "nav": {
+    "label": "navigation",
+    "background": "transparent",
+    "backgroundImage": "",
+    "backdropFilter": "",
+    "color": "#ECEFFB",
+    "padding": "16px 32px",
+    "borderRadius": "0px",
+    "border": "",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "height": "65px"
+  },
+  "chips": [],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [],
+  "glass": []
+}

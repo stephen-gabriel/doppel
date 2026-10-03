@@ -1,0 +1,9 @@
+{
+  "provider": "kokoro-local",
+  "voice": "af_heart",
+  "voices": [{ "frame": 1, "path": "assets/narration.wav", "duration_s": 18.176, "words": [] }],
+  "bgm": { "path": "assets/music-original.wav", "volume": 0.3, "source": "Original programmatic ambient composition, generated locally" },
+  "sfx": [],
+  "captions": "skipped; explanatory scene copy only",
+  "total_duration_s": 24
+}

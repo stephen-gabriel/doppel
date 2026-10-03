@@ -1,0 +1,17 @@
+{
+  "name": "@doppel/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "replay": "node --experimental-strip-types src/cli.ts"
+  },
+  "dependencies": {
+    "@doppel/engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}

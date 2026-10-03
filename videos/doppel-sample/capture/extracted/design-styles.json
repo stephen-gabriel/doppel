@@ -1,0 +1,119 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "48px",
+      "fontWeight": "500",
+      "lineHeight": "54px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": "Check the recipient before you send."
+    },
+    {
+      "role": "heading",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "20px",
+      "fontWeight": "500",
+      "lineHeight": "28px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": "Start here: check an address without sending money"
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "20px",
+      "fontWeight": "400",
+      "lineHeight": "28px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": "Your address comparison"
+    },
+    {
+      "role": "body",
+      "fontFamily": "Bricolage Grotesque",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "26px",
+      "letterSpacing": "normal",
+      "color": "#A3AAD0",
+      "sampleText": "Save an address you trust in your address book, then compare"
+    },
+    {
+      "role": "code",
+      "fontFamily": "JetBrains Mono",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "26px",
+      "letterSpacing": "normal",
+      "color": "#ECEFFB",
+      "sampleText": ""
+    }
+  ],
+  "spacing": {
+    "observed": [
+      8,
+      12,
+      16,
+      20,
+      24,
+      32
+    ],
+    "baseUnit": 8
+  },
+  "radius": [
+    "12px"
+  ],
+  "shadows": [],
+  "buttons": [
+    {
+      "label": "See a matching example",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#ECEFFB",
+      "padding": "0px 12px",
+      "borderRadius": "12px",
+      "border": "1px solid rgb(46, 53, 98)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "44px"
+    },
+    {
+      "label": "Check address",
+      "background": "#8F9CFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#0D1030",
+      "padding": "0px 16px",
+      "borderRadius": "12px",
+      "border": "0px solid rgb(13, 16, 48)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "44px"
+    }
+  ],
+  "cards": [],
+  "nav": {
+    "label": "navigation",
+    "background": "transparent",
+    "backgroundImage": "",
+    "backdropFilter": "",
+    "color": "#ECEFFB",
+    "padding": "16px 32px",
+    "borderRadius": "0px",
+    "border": "",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "height": "65px"
+  },
+  "chips": [],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [],
+  "glass": []
+}

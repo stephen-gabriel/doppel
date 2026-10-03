@@ -1,0 +1,9 @@
+{
+  "endpoint": "https://api.devnet.solana.com",
+  "publicKey": "EmifjyizhpzfJt9LLwmaDUiM9DKQxnZCiLPts9kYJiMA",
+  "ok": false,
+  "signature": null,
+  "error": "You've either reached your airdrop limit today or the airdrop faucet has run dry. Please visit https://faucet.solana.com for alternate sources of test SOL",
+  "discardedPreviousInvalidKey": "GiE4i7HuNHYc1nfyepW5FPuKyoiq6v5NZT2MUXp8HtTT",
+  "note": "Previous generateDisposableKey encoded secret bytes as a public key. That key was never funded and must not be used."
+}
