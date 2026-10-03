@@ -12,7 +12,8 @@ M2 takeover: real Ed25519 keys, strict transaction inspection, sign-only wallet 
 - Real-browser tests cover recipient persistence, mismatch, in-flight edits, expiry, cross-tab changes, partial-history acknowledgment and serialized wallet requests. The injected signing provider in automated tests is a controlled double, not an installed wallet extension.
 - Reference policy revision 0.2: an exact confirmed recipient with partial history can proceed only after explicit acknowledgment for that check. Coverage stays partial and pattern may stay unknown. Unavailable/unresolved history and suspicious findings still block. Edits, cancellation, recheck or expiry clear acknowledgment.
 - Wallets sign only. Doppel verifies the returned message/signatures, rechecks the current draft and recipient, and submits only to an observed devnet RPC. Account creation and unvalidated extras are rejected; wallet-added compute settings have the bounded exception below. Devnet USDC requires existing associated token accounts; the app does not create them.
-- Installed-Phantom SOL walkthrough passed: builder observed blocked mismatch and successful payment; independent devnet RPC confirmed 0.001 SOL transferred with a 0.00008 test SOL fee. G4/G5 pass for this workflow. See `fixtures/g5-confirmed-devnet-transfer.json`. Live USDC execution, other wallets and Solami monitoring remain unverified.
+- Installed-Phantom SOL walkthrough passed: builder observed blocked mismatch and successful payment; independent devnet RPC confirmed 0.001 SOL transferred with a 0.00008 test SOL fee. G4/G5 pass for this workflow. See `fixtures/g5-confirmed-devnet-transfer.json`. Live USDC execution, other wallets and Solami live streaming remain unverified.
+- A verified mainnet monitor capture is bundled for hosted judging: 25 mainnet transactions fetched with no failed requests, 216 parsed events, 17 retained, last observed slot 303463012. Zero poisoning findings were detected for that wallet, which is the honest result rather than a fabricated alert.
 
 ## Setup
 
@@ -90,7 +91,7 @@ pnpm --filter @doppel/worker replay
 
 Worker options are environment variables: `MONITOR_MODE=replay`, `MONITOR_PORT=4318`, `REPLAY_INTERVAL_MS=1000`, `WORKER_DB_PATH`. The CLI does not auto-load `.env`. The web app and worker need the same port if changed. Bundled replay rejects custom `WATCH_WALLETS` rather than pretending to monitor them. Unsupported live modes fail explicitly.
 
-Production web deployment defaults to Monitor offline; `MONITOR_LOCAL_ENABLED=1` is for a deliberately co-located local worker, not a way to reach the builder's PC from Vercel. Hosted snapshot ingestion/storage is not yet implemented.
+Production web deployment defaults to the bundled historical mainnet capture; `MONITOR_LOCAL_ENABLED=1` is for a deliberately co-located local worker, not a way to reach the builder's PC from Vercel. Hosted snapshot ingestion/storage is not yet implemented.
 
 **Still pending in M3:** G1 promotional access, verified Yellowstone/Mirage adapter, actual mainnet history prefill/owner discovery, real replay-window/backfill recovery, five-minute capability probe, and one-hour mainnet stability measurement. The local replay and simulated recovery do not satisfy those sponsor gates. Public Solami overview was checked, but its stream wire format and account entitlements have not been verified; no endpoints or filters were guessed.
 
@@ -98,6 +99,15 @@ Production web deployment defaults to Monitor offline; `MONITOR_LOCAL_ENABLED=1`
 
 The core remains usable independently of a Pro stream. Check supports a configured standard Solami RPC primary with public-mainnet RPC failover; missing configuration/access failures are visibly labelled. Provider downtime does not remove the local recipient comparison. Public RPC can also be limited/unavailable, in which case history is explicitly unknown.
 
-Monitor supports a reviewed historical mainnet snapshot bundled at deployment. Live/offline/captured states and capture dates are distinct. The current bundle is intentionally empty until a real monitored-mainnet capture exists; it never substitutes the synthetic replay as real evidence. See `docs/RELEASE_GUIDE.md` for configuration, capture export and limits.
+Monitor supports a reviewed historical mainnet snapshot bundled at deployment. Live/offline/captured states and capture dates are distinct. The bundle now contains a real capture taken from live mainnet public RPC (see `apps/web/src/data/monitor-capture.json`), forced to historical/stopped and never presented as live activity. It records zero poisoning findings for the observed wallet, which is the honest result; the synthetic replay is never substituted as mainnet evidence. See `docs/RELEASE_GUIDE.md` for configuration, capture export and limits.
+
+Recreate or refresh the capture yourself (free public RPC, no API key):
+
+```bash
+node --experimental-strip-types apps/worker/src/capture-mainnet.ts <wallet> captures/mainnet-wallet.json 25
+node --experimental-strip-types apps/worker/src/export-capture.ts captures/mainnet-wallet.json apps/web/src/data/monitor-capture.json
+```
+
+The exporter refuses synthetic/replay/non-mainnet input and will not overwrite an existing bundle. Public mainnet RPC rate-limits aggressively; the capture tool backs off on HTTP 429 so a capture is not silently truncated.
 
 Solami's Civa said “We will use our key for judging” in the builder-pasted Telegram exchange. Judge-supplied credentials support repo-based review; this is separate from the hosted site's key. Trial not activated, live sponsor verification and deployment still pending.
