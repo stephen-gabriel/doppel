@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 
 // Per-line narration so scene cuts land on exact measured boundaries instead of estimates.
@@ -8,8 +8,36 @@ const root = path.resolve(import.meta.dirname, '..');
 const dir = path.join(root, 'assets', 'vo');
 await mkdir(dir, { recursive: true });
 
-const FFPROBE = 'C:\\Users\\ZERO\\AppData\\Local\\Temp\\opencode\\doppel-video-tools\\node_modules\\ffprobe-static\\bin\\win32\\x64\\ffprobe.exe';
-if (!existsSync(FFPROBE)) throw new Error(`ffprobe not found at ${FFPROBE}`);
+// ffprobe only measures the wavs this script generates. Resolve it from $FFPROBE, then a
+// local ffprobe-static / @ffprobe-installer install, then PATH - so the build never depends
+// on one machine's temp directories.
+const require = createRequire(import.meta.url);
+const ffprobeCandidates = [];
+if (process.env.FFPROBE) ffprobeCandidates.push(process.env.FFPROBE);
+for (const spec of ['ffprobe-static', '@ffprobe-installer/ffprobe']) {
+  try {
+    const mod = require(spec);
+    const bin = typeof mod === 'string' ? mod : mod?.path ?? mod?.default?.path;
+    if (bin) ffprobeCandidates.push(bin);
+  } catch {
+    // not installed here; fall through to the next candidate
+  }
+}
+ffprobeCandidates.push(process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe');
+
+const FFPROBE = (() => {
+  for (const bin of ffprobeCandidates) {
+    try {
+      execFileSync(bin, ['-version'], { stdio: 'ignore' });
+      return bin;
+    } catch {
+      // unusable; try the next candidate
+    }
+  }
+  throw new Error(
+    `ffprobe not found. Install it (npm i -D ffprobe-static) or set FFPROBE to its full path. Tried: ${ffprobeCandidates.join(', ')}`
+  );
+})();
 
 const lines = [
   ['01', 'Anyone can put an address into your wallet history.'],

@@ -11,5 +11,8 @@
   "dependencies": {
     "@hyperframes/core": "^0.8.113",
     "gsap": "^3.15.0"
+  },
+  "devDependencies": {
+    "ffprobe-static": "^3.1.0"
   }
 }
