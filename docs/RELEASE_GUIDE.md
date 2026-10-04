@@ -29,7 +29,7 @@ Check defaults to public Solana RPC. A standard-RPC primary can now be configure
 - Check and Prepare visibly identify fallback results. Partially read primary evidence is retained instead of disappearing; incomplete/conflicting results stay partial/review. Primary error details and authenticated endpoint are not exposed. If public RPC also fails, explain the unavailable history; the local saved-address comparison still works and signing stays guarded.
 - Browser-local address book and public-devnet execution are independent of Solami.
 - Monitor can serve a **build-bundled historical mainnet snapshot**, even when the worker is offline or the deployed runtime restarts. No database or live subscription is needed to display that saved evidence. Capture date, original heartbeat, historical mode and stopped state are explicit.
-- The bundled file `apps/web/src/data/monitor-capture.json` is currently EMPTY because no actual mainnet monitoring capture exists yet. The UI says so. This feature does not manufacture a completed live integration.
+- The bundled file `apps/web/src/data/monitor-capture.json` holds a **real captured mainnet snapshot**, exported from a live public-RPC run (origin `chain`, cluster `mainnet-beta`, mode `historical`, state `stopped`). It is not live activity and the UI says so. This feature does not manufacture a completed live integration.
 
 After a verified mainnet run, save the worker's `/snapshot` JSON using your operator workflow. Export it with:
 

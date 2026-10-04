@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { overlappingPrefixLength, overlappingSuffixLength } from "@doppel/engine";
+import { Button } from "./Button";
 
 export function AddressDiff(props: { address: string; other: string; label: string }) {
   const [message, setMessage] = useState<string | null>(null);
@@ -20,9 +21,10 @@ export function AddressDiff(props: { address: string; other: string; label: stri
         <span>{middle}</span>
         <span className="text-iris">{end}</span>
       </p>
-      <button
-        type="button"
-        className="mt-2 min-h-11 text-sm text-iris"
+      <Button
+        variant="secondary"
+        size="sm"
+        className="mt-2"
         aria-label={`Copy full address: ${props.label}`}
         onClick={() => { void navigator.clipboard?.writeText(props.address)
           .then(() => setMessage("Address copied."))
@@ -30,7 +32,7 @@ export function AddressDiff(props: { address: string; other: string; label: stri
           if (!navigator.clipboard) setMessage("Copy unavailable. Select the full address above to copy it."); }}
       >
         Copy full address
-      </button>
+      </Button>
       {message ? <p className="text-sm text-muted" role="status">{message}</p> : null}
     </div>
   );

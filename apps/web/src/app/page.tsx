@@ -9,6 +9,7 @@ import {
   type RecipientRecord,
 } from "@doppel/engine";
 import { ActionNote, ContinuityBadge, CoverageNote, PatternBadge } from "../components/ResultBadges";
+import { Button } from "../components/Button";
 import { EvidenceTimeline } from "../components/EvidenceTimeline";
 import { TwinPanel } from "../components/TwinPanel";
 import { NetworkSelect } from "../components/NetworkSelect";
@@ -61,15 +62,15 @@ export default function CheckPage() {
         <p className="mt-2 text-muted">Save an address you trust in your <Link href="/recipients" className="text-iris underline">address book</Link>,
           then compare it with the address you are about to pay. No wallet connection, SOL balance or transaction fee is needed.</p>
         <div className="mt-3 flex flex-wrap gap-3">
-          <button type="button" className="min-h-11 rounded-[12px] border border-line px-3" onClick={() => setExample("match")}>See a matching example</button>
-          <button type="button" className="min-h-11 rounded-[12px] border border-line px-3" onClick={() => setExample("different")}>See a lookalike example</button>
-          <Link href="/prepare" className="min-h-11 px-2 leading-[44px] text-iris underline">Want to try a test payment?</Link>
+          <Button variant="secondary" onClick={() => setExample("match")}>See a matching example</Button>
+          <Button variant="secondary" onClick={() => setExample("different")}>See a lookalike example</Button>
+          <Link href="/prepare" className="min-h-11 self-center px-2 leading-[44px] text-iris underline">Want to try a test payment?</Link>
         </div>
         {example ? <div className="mt-4 space-y-3" aria-live="polite">
           <p className="text-sm text-muted">Address-comparison example only · no network request or wallet check. These are addresses from a published case, not recommended payment destinations.</p>
           <TwinPanel leftLabel="Address saved for Ada (illustration)" left={EXAMPLE_REAL}
             rightLabel="Address pasted for payment" right={example === "match" ? EXAMPLE_REAL : EXAMPLE_SPOOF} />
-          <button type="button" className="min-h-11 text-iris" onClick={() => setExample(null)}>Close example</button>
+          <Button variant="ghost" onClick={() => setExample(null)}>Close example</Button>
         </div> : null}
       </div>
     <div className="grid gap-6 lg:grid-cols-12">
@@ -145,12 +146,12 @@ export default function CheckPage() {
             This only checks addresses. We look at both SOL and USDC history; no money will move.
           </p>
           <div className="flex gap-3">
-            <button type="submit" disabled={snapshot.stage === "checking"} className="h-11 rounded-[12px] bg-iris px-4 text-on-iris disabled:opacity-40">
+            <Button type="submit" variant="primary" disabled={snapshot.stage === "checking"}>
               {snapshot.stage === "checking" ? "Checking history…" : "Check address"}
-            </button>
-            <button type="button" className="h-11 rounded-[12px] border border-line px-4" onClick={cancel}>
+            </Button>
+            <Button variant="secondary" onClick={cancel}>
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
         <p className="mt-4 text-sm text-muted" role="status">{snapshot.stage === "idle" ? "Fill in the addresses to begin."

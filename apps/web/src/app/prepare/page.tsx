@@ -21,6 +21,7 @@ import { listRecipients, subscribeRecipientChanges } from "../../lib/recipient-b
 import { useCheckCoordinator } from "../../lib/use-check-coordinator";
 import { connectWallet, DEVNET_ENDPOINT, MAX_WALLET_PRIORITY_FEE_LAMPORTS, MAX_WALLET_TOTAL_FEE_LAMPORTS, requestWalletSignature, walletAvailability } from "../../lib/wallet";
 import { NetworkSelect } from "../../components/NetworkSelect";
+import { Button } from "../../components/Button";
 import { formatRawAmount, parseDisplayAmount } from "../../lib/amounts";
 import { checkDevnetFunding } from "../../lib/funding";
 
@@ -191,10 +192,10 @@ export default function PreparePage() {
         </div>
       )}
       {cluster === "devnet" ? <section className="rounded-[12px] border border-line bg-ink p-4" aria-label="Wallet connection">
-        <button type="button" className="min-h-11 cursor-pointer rounded-[12px] bg-iris px-5 py-2 font-medium text-on-iris transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-iris disabled:cursor-wait disabled:opacity-60"
+        <Button variant="primary" className="px-5"
           aria-busy={walletState === "connecting"} disabled={busy || walletState === "connecting"} onClick={() => void onConnect()}>
           {walletState === "connecting" ? "Connecting… check your wallet" : "Connect my test wallet"}
-        </button>
+        </Button>
         <div className="mt-3 text-sm" role="status" aria-live="polite">
           {walletState === "missing" ? <>
             <p className="text-review">No compatible Solana wallet detected in this browser.</p>
@@ -287,12 +288,12 @@ export default function PreparePage() {
           </span>
         </label>
         <div className="md:col-span-2 flex gap-3">
-          <button type="submit" disabled={Boolean(amountError) || snapshot.stage === "checking" || busy} className="h-11 rounded-[12px] bg-iris px-4 text-on-iris disabled:opacity-40">
+          <Button type="submit" variant="primary" disabled={Boolean(amountError) || snapshot.stage === "checking" || busy}>
             {snapshot.stage === "checking" ? "Checking history…" : "Check payment details"}
-          </button>
-          <button type="button" className="h-11 rounded-[12px] border border-line px-4" onClick={cancel}>
+          </Button>
+          <Button variant="secondary" onClick={cancel}>
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
       {selected && destination ? <TwinPanel leftLabel={`Saved address for ${selected.label}`} left={selected.address}
@@ -329,14 +330,13 @@ export default function PreparePage() {
       {cluster === "mainnet-beta" ? (
         <p className="text-muted">Read-only review. To practice sending, choose Test network · devnet above.</p>
       ) : (
-        <button
-          type="button"
-          className="h-11 rounded-[12px] bg-iris px-4 text-on-iris disabled:opacity-40"
+        <Button
+          variant="primary"
           disabled={busy || Boolean(amountError) || snapshot.combined.action !== "ready_for_confirmation" || snapshot.stale}
           onClick={() => void onDevnetSend()}
         >
           {busy ? "Preparing test payment…" : "Approve test payment in wallet"}
-        </button>
+        </Button>
       )}
       {cluster === "devnet" && asset !== "SOL" ? <p className="text-review">USDC is a more advanced test: the sender needs test USDC and test SOL for fees, and both wallets need existing USDC token accounts. Start with SOL for your first test.</p> : null}
       {message ? <p className="break-words text-review" role="status">{message}</p> : null}

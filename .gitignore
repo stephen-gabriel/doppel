@@ -26,3 +26,10 @@ test-results/
 playwright-report/
 videos/**/.hyperframes/preview/
 videos/**/.media/
+# Generated demo-video media: reproducible from videos/<project>/scripts, too large for git.
+# The composition HTML, scripts, notes and captured UI stills stay tracked.
+videos/**/renders/
+videos/**/snapshots/
+videos/**/.thumbnails/
+videos/**/assets/*.wav
+videos/**/assets/vo/

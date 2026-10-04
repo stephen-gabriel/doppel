@@ -1,0 +1,364 @@
+<template>
+  <div data-hf-id="hf-demo-root" id="root" data-composition-id="doppel-demo" data-width="1920" data-height="1080" data-duration="90" data-fps="30">
+    <style>
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("assets/bricolage.woff2") format("woff2");
+        font-weight: 400 600;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/mono.woff2") format("woff2");
+        font-weight: 400 600;
+        font-style: normal;
+      }
+      #root {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        container-type: size;
+        isolation: isolate;
+        color: #ECEFFB;
+        font-family: "Bricolage Grotesque";
+        pointer-events: none;
+      }
+      #root * { box-sizing: border-box; }
+      #root img { display: block; max-width: none; }
+      #root h1, #root h2, #root p { margin: 0; }
+      #root [data-scene-layer] { position: absolute; inset: 0; }
+      /* Only one scene is ever on screen; hidden scenes are truly hidden, not just transparent. */
+      #root .sc { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+      #root [data-plate] {
+        position: absolute;
+        overflow: hidden;
+        border-radius: 14px;
+        outline: 1.5px solid rgba(143, 156, 255, 0.2);
+        background: rgba(143, 156, 255, 0.04);
+      }
+      #root [data-plate] img { width: 100%; height: auto; }
+      #root [data-heading] {
+        position: absolute;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      #d-ground { background: #10142A; }
+      #d-brand {
+        position: absolute;
+        left: 5cqw; top: 6.3cqh; height: 4.8cqh;
+        display: flex; align-items: center; gap: 0.85cqw;
+        font-size: 1.8cqw; font-weight: 600; letter-spacing: -0.02em;
+      }
+      #d-brand img { width: 2.45cqw; height: 2.45cqw; object-fit: contain; }
+
+      /* 1 — the two addresses */
+      #d-hook-line {
+        position: absolute; left: 5cqw; top: 21cqh;
+        width: 3.125cqw; height: 4px; border-radius: 2px;
+        background: #8F9CFF; transform-origin: left center;
+      }
+      #d-hook-title { left: 5cqw; top: 25cqh; width: 52cqw; font-size: 4.2cqw; }
+      #d-addr-wrap { position: absolute; left: 5cqw; top: 50cqh; width: 90cqw; }
+      #d-addr-wrap .row {
+        display: flex; align-items: center; gap: 1.6cqw;
+        font-family: "JetBrains Mono"; font-size: 1.8cqw; letter-spacing: 0.01em;
+        padding: 1.5cqh 2cqw; border-radius: 12px;
+        background: rgba(143, 156, 255, 0.06);
+        outline: 1.5px solid rgba(143, 156, 255, 0.18);
+      }
+      #d-addr-b { margin-top: 2.2cqh; }
+      #d-addr-wrap .tag {
+        min-width: 11cqw; color: #A3AAD0; font-family: "Bricolage Grotesque";
+        font-size: 1.25cqw; letter-spacing: 0.02em;
+      }
+      #d-addr-wrap .edge { color: #8F9CFF; font-weight: 600; }
+      #d-addr-wrap .mid-a { color: #ECEFFB; }
+      #d-addr-wrap .mid-b { color: #ECEFFB; }
+
+      /* 2 — poisoning sequence */
+      #d-attack-title { left: 5cqw; top: 15.5cqh; width: 90cqw; font-size: 2.9cqw; }
+      #d-steps { position: absolute; left: 5cqw; top: 32cqh; width: 90cqw; display: flex; gap: 2cqw; }
+      #d-steps .step {
+        flex: 1; padding: 3cqh 2cqw; border-radius: 14px;
+        background: rgba(143, 156, 255, 0.05);
+        outline: 1.5px solid rgba(143, 156, 255, 0.18);
+      }
+      #d-steps .n {
+        font-family: "JetBrains Mono"; font-size: 1.15cqw; color: #8F9CFF;
+        letter-spacing: 0.08em; margin-bottom: 1.6cqh;
+      }
+      #d-steps .t { font-size: 1.65cqw; font-weight: 600; line-height: 1.35; margin-bottom: 1.2cqh; }
+      #d-steps .s { font-size: 1.2cqw; color: #A3AAD0; line-height: 1.6; }
+      #d-steps .danger { color: #FF7A7A; }
+
+      /* 3 — promise card */
+      #d-promise-logo { position: absolute; left: 46.875cqw; top: 30cqh; width: 6.25cqw; height: 6.25cqw; object-fit: contain; }
+      #d-promise-title { left: 13cqw; top: 45cqh; width: 74cqw; text-align: center; font-size: 3.9cqw; line-height: 1.1; }
+
+      /* Shared product-plate scenes */
+      #root .shot-title { position: absolute; left: 5cqw; top: 14.5cqh; width: 90cqw; font-size: 2.6cqw; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+      #root .shot-sub { position: absolute; left: 5cqw; top: 21.5cqh; width: 74cqw; color: #A3AAD0; font-size: 1.35cqw; line-height: 1.55; }
+      #d-home { left: 23cqw; top: 28cqh; width: 54cqw; height: 52cqh; transform-origin: 50% 20%; }
+      #d-recipients { left: 23cqw; top: 28cqh; width: 54cqw; height: 52cqh; transform-origin: 50% 25%; }
+      #d-monitor { left: 23cqw; top: 28cqh; width: 54cqw; height: 52cqh; transform-origin: 50% 20%; }
+
+      /* 6 — twin panel mismatch. 2112x356 at 90cqw => 26.97cqh. */
+      #d-twin-title { left: 5cqw; top: 15cqh; width: 90cqw; font-size: 2.75cqw; }
+      #d-different { color: #FF7A7A; }
+      #d-twin { left: 5cqw; top: 27cqh; width: 90cqw; height: 26.97cqh; transform-origin: center center; }
+      /* 2028x120 at 90cqw => 9.47cqh. */
+      #d-result { left: 5cqw; top: 58cqh; width: 90cqw; height: 9.47cqh; }
+      #d-evidence { position: absolute; left: 5cqw; top: 71cqh; width: 90cqw; display: flex; gap: 1.6cqw; }
+      #d-evidence .chip {
+        padding: 1.3cqh 1.6cqw; border-radius: 10px;
+        font-family: "JetBrains Mono"; font-size: 1.1cqw; color: #A3AAD0;
+        background: rgba(143, 156, 255, 0.06);
+        outline: 1.5px solid rgba(143, 156, 255, 0.16);
+      }
+
+      /* 7 — blocked. 532x88 at 24.17cqw => 7.11cqh. */
+      #d-block-title { left: 13cqw; top: 33cqh; width: 74cqw; text-align: center; font-size: 3.4cqw; line-height: 1.12; }
+      #d-button { left: 37.9cqw; top: 52cqh; width: 24.17cqw; height: 7.11cqh; border-radius: 10px; }
+      #d-block-note {
+        position: absolute; left: 20cqw; top: 64cqh; width: 60cqw; text-align: center;
+        color: #A3AAD0; font-family: "JetBrains Mono"; font-size: 1.15cqw; line-height: 1.6;
+      }
+
+      /* 8 — match restored */
+      #d-match-title { left: 5cqw; top: 18cqh; width: 90cqw; font-size: 2.75cqw; }
+      #d-ok { color: #7BE3A3; }
+      #d-twin-match { left: 5cqw; top: 31cqh; width: 90cqw; height: 26.97cqh; }
+      #d-devnet {
+        position: absolute; left: 5cqw; top: 64cqh; width: 90cqw;
+        color: #A3AAD0; font-family: "JetBrains Mono"; font-size: 1.2cqw; line-height: 1.7;
+      }
+
+      /* 10 — close */
+      #d-close-logo { position: absolute; left: 46.875cqw; top: 22cqh; width: 6.25cqw; height: 6.25cqw; object-fit: contain; }
+      #d-close-title { left: 13cqw; top: 38cqh; width: 74cqw; text-align: center; font-size: 4.2cqw; line-height: 1.08; }
+      #d-close-context { position: absolute; left: 10cqw; top: 57cqh; width: 80cqw; text-align: center; color: #A3AAD0; font-size: 1.55cqw; line-height: 1.6; }
+      #d-close-demo { position: absolute; left: 10cqw; top: 63cqh; width: 80cqw; text-align: center; color: #A3AAD0; font-family: "JetBrains Mono"; font-size: 1.3cqw; line-height: 1.6; }
+
+      #d-source {
+        position: absolute; left: 5cqw; top: 91cqh; color: #A3AAD0;
+        font-family: "JetBrains Mono"; font-size: 0.85cqw; letter-spacing: 0.015em; line-height: 1.6;
+      }
+      #d-progress {
+        position: absolute; left: 5cqw; top: 86cqh; width: 90cqw; height: 3px;
+        background: #8F9CFF; transform-origin: left center; opacity: 0.5;
+      }
+    </style>
+
+    <div data-hf-id="hf-d-ground" id="d-ground" class="clip" data-scene-layer="ground" data-start="0" data-duration="90" data-track-index="0"></div>
+
+    <div data-hf-id="hf-d-content" id="d-content" class="clip" data-scene-layer="content" data-start="0" data-duration="90" data-track-index="1">
+      <div data-hf-id="hf-d-brand" id="d-brand"><img data-hf-id="hf-d-brandimg" src="assets/doppel-logo.svg" alt=""> <span data-hf-id="hf-d-brandtxt">Doppel</span></div>
+
+      <section data-hf-id="hf-d-hook" id="d-hook" class="sc" aria-label="Two addresses that look alike">
+        <div data-hf-id="hf-d-hookline" id="d-hook-line"></div>
+        <h1 data-hf-id="hf-d-hooktitle" id="d-hook-title" data-heading="">These two addresses<br data-hf-id="hf-d-br1">are not the same.</h1>
+        <div data-hf-id="hf-d-addrwrap" id="d-addr-wrap">
+          <div data-hf-id="hf-d-addra" id="d-addr-a" class="row">
+            <span data-hf-id="hf-d-taga" class="tag">You paid before</span>
+            <span data-hf-id="hf-d-a1" class="edge">4yfu</span><span data-hf-id="hf-d-a2" class="mid-a">48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnh</span><span data-hf-id="hf-d-a3" class="edge">Y</span>
+          </div>
+          <div data-hf-id="hf-d-addrb" id="d-addr-b" class="row">
+            <span data-hf-id="hf-d-tagb" class="tag">In your history</span>
+            <span data-hf-id="hf-d-b1" class="edge">4yfu</span><span data-hf-id="hf-d-b2" id="d-b2" class="mid-b">QCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizc</span><span data-hf-id="hf-d-b3" class="edge">Y</span>
+          </div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-d-attack" id="d-attack" class="sc" aria-label="How address poisoning works">
+        <h2 data-hf-id="hf-d-attacktitle" id="d-attack-title" data-heading="">How address poisoning works</h2>
+        <div data-hf-id="hf-d-steps" id="d-steps">
+          <div data-hf-id="hf-d-step1" id="d-step1" class="step">
+            <div data-hf-id="hf-d-n1" class="n">01</div>
+            <div data-hf-id="hf-d-t1" class="t">A lookalike is generated</div>
+            <div data-hf-id="hf-d-s1" class="s">An address is ground out until its first and last characters match someone you really pay.</div>
+          </div>
+          <div data-hf-id="hf-d-step2" id="d-step2" class="step">
+            <div data-hf-id="hf-d-n2" class="n">02</div>
+            <div data-hf-id="hf-d-t2" class="t">Dust lands in your history</div>
+            <div data-hf-id="hf-d-s2" class="s">A worthless transfer arrives from it, so the address sits in your wallet activity.</div>
+          </div>
+          <div data-hf-id="hf-d-step3" id="d-step3" class="step">
+            <div data-hf-id="hf-d-n3" class="n">03</div>
+            <div data-hf-id="hf-d-t3" class="t danger">You copy the wrong one</div>
+            <div data-hf-id="hf-d-s3" class="s">Later you reuse the address from history, and the payment goes to the attacker.</div>
+          </div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-d-promise" id="d-promise" class="sc" aria-label="Doppel checks before you sign">
+        <img data-hf-id="hf-d-promiselogo" id="d-promise-logo" src="assets/doppel-logo.svg" alt="Doppel">
+        <h2 data-hf-id="hf-d-promisetitle" id="d-promise-title" data-heading="">Doppel checks the recipient<br data-hf-id="hf-d-br2">before you sign.</h2>
+      </section>
+
+      <section data-hf-id="hf-d-check" id="d-check" class="sc" aria-label="Check an address">
+        <h2 data-hf-id="hf-d-checktitle" id="d-check-title" class="shot-title">Check an address</h2>
+        <p data-hf-id="hf-d-checksub" id="d-check-sub" class="shot-sub">Real mainnet history over public RPC. No wallet connection, no funds, no signature.</p>
+        <div data-hf-id="hf-d-homeplate" id="d-home" data-plate=""><img data-hf-id="hf-d-homeimg" data-layout-allow-overflow="" src="assets/home.png" width="2880" height="2000" alt="Captured Doppel address check page"></div>
+      </section>
+
+      <section data-hf-id="hf-d-saved" id="d-saved" class="sc" aria-label="Saved recipients">
+        <h2 data-hf-id="hf-d-savedtitle" id="d-saved-title" class="shot-title">Confirm a recipient once</h2>
+        <p data-hf-id="hf-d-savedsub" id="d-saved-sub" class="shot-sub">Doppel remembers it locally, then compares it against the address in front of you.</p>
+        <div data-hf-id="hf-d-recplate" id="d-recipients" data-plate=""><img data-hf-id="hf-d-recimg" data-layout-allow-overflow="" src="assets/recipients.png" width="2880" height="2000" alt="Captured Doppel address book"></div>
+      </section>
+
+      <section data-hf-id="hf-d-mismatch" id="d-mismatch" class="sc" aria-label="Mismatch detected">
+        <h2 data-hf-id="hf-d-twintitle" id="d-twin-title" data-heading="">Same edges. <span data-hf-id="hf-d-diff" id="d-different">Different address.</span></h2>
+        <div data-hf-id="hf-d-twinplate" id="d-twin" data-plate=""><img data-hf-id="hf-d-twinimg" src="assets/twin-mismatch.png" width="2112" height="356" alt="Actual Twin Panel comparing saved and pasted addresses"></div>
+        <div data-hf-id="hf-d-resultplate" id="d-result" data-plate=""><img data-hf-id="hf-d-resultimg" src="assets/result-mismatch.png" width="2028" height="120" alt="Actual mismatch summary"></div>
+        <div data-hf-id="hf-d-evidence" id="d-evidence">
+          <div data-hf-id="hf-d-chip1" id="d-chip1" class="chip">first 4 match</div>
+          <div data-hf-id="hf-d-chip2" id="d-chip2" class="chip">last 1 matches</div>
+          <div data-hf-id="hf-d-chip3" id="d-chip3" class="chip">39 characters differ</div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-d-blocked" id="d-blocked" class="sc" aria-label="Signing is blocked">
+        <h2 data-hf-id="hf-d-blocktitle" id="d-block-title" data-heading="">The wallet is never asked.</h2>
+        <div data-hf-id="hf-d-buttonplate" id="d-button" data-plate=""><img data-hf-id="hf-d-buttonimg" src="assets/blocked-button.png" width="532" height="88" alt="Actual disabled payment button"></div>
+        <p data-hf-id="hf-d-blocknote" id="d-block-note">Signature request blocked before the wallet is opened</p>
+      </section>
+
+      <section data-hf-id="hf-d-match" id="d-match" class="sc" aria-label="Match restored">
+        <h2 data-hf-id="hf-d-matchtitle" id="d-match-title" data-heading="">Correct address. <span data-hf-id="hf-d-okspan" id="d-ok">Check clears.</span></h2>
+        <div data-hf-id="hf-d-twinmatchplate" id="d-twin-match" data-plate=""><img data-hf-id="hf-d-twinmatchimg" src="assets/twin-match.png" width="2112" height="356" alt="Actual Twin Panel showing a confirmed match"></div>
+        <p data-hf-id="hf-d-devnet" id="d-devnet">Devnet payment confirmed · signature pufgEmeH…uraGHk7 · 0.001 SOL</p>
+      </section>
+
+      <section data-hf-id="hf-d-monitorsec" id="d-monitor-sec" class="sc" aria-label="Monitor saved recipients">
+        <h2 data-hf-id="hf-d-montitle" id="d-mon-title" class="shot-title">Monitor saved recipients</h2>
+        <p data-hf-id="hf-d-monsub" id="d-mon-sub" class="shot-sub">Captured mainnet history, labelled historical — never presented as live activity.</p>
+        <div data-hf-id="hf-d-monplate" id="d-monitor" data-plate=""><img data-hf-id="hf-d-monimg" data-layout-allow-overflow="" src="assets/monitor.png" width="2880" height="2000" alt="Captured Doppel monitor showing historical mainnet observations"></div>
+      </section>
+
+      <section data-hf-id="hf-d-close" id="d-close" class="sc" aria-label="Doppel closing lockup">
+        <img data-hf-id="hf-d-closelogo" id="d-close-logo" src="assets/doppel-logo.svg" alt="Doppel">
+        <h2 data-hf-id="hf-d-closetitle" id="d-close-title" data-heading="">Check the recipient<br data-hf-id="hf-d-br3">before you sign.</h2>
+        <p data-hf-id="hf-d-closecontext" id="d-close-context">Open source · runs on free public RPC with no API key</p>
+        <p data-hf-id="hf-d-closedemo" id="d-close-demo">Mainnet read-only analysis · devnet payment demo</p>
+      </section>
+
+      <div data-hf-id="hf-d-progress" id="d-progress"></div>
+      <p data-hf-id="hf-d-source" id="d-source">Sample scenario · captured app UI · no transaction sent</p>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        function el(name) { return document.getElementById("d-" + name); }
+        var tl = gsap.timeline({ paused: true });
+
+        // Scene boundaries come from the measured per-line narration durations.
+        var S1 = 0, S2 = 9.985, S3 = 22.574, S4 = 25.499, S5 = 36.018,
+            S6 = 42.868, S7 = 53.515, S8 = 57.912, S9 = 65.402, S10 = 80.359, END = 90;
+
+        // One scene visible at a time; autoAlpha keeps hidden scenes out of layout and paint.
+        function scene(name, start, end) {
+          var node = el(name);
+          tl.set(node, { autoAlpha: 1 }, start);
+          if (end < END) tl.to(node, { autoAlpha: 0, duration: 0.45, ease: "power2.inOut" }, end - 0.45);
+        }
+        function enter(node, at, fromY, dur) {
+          tl.fromTo(node, { opacity: 0, y: (fromY || 2) + "cqh" },
+            { opacity: 1, y: "0cqh", duration: dur || 0.7, ease: "power3.out" }, at);
+        }
+
+        tl.fromTo(el("brand"), { opacity: 0, y: "1cqh" }, { opacity: 1, y: "0cqh", duration: 0.5, ease: "power2.out" }, 0.15);
+
+        // 1 — hook
+        scene("hook", S1, S2);
+        tl.fromTo(el("hook-line"), { scaleX: 0 }, { scaleX: 1, duration: 0.65, ease: "power2.out" }, 0.3);
+        enter(el("hook-title"), 0.45, 2.2, 0.75);
+        enter(el("addr-a"), 1.9, 1.6, 0.65);
+        enter(el("addr-b"), 4.5, 1.6, 0.65);
+        // Reveal the differing middle only once the narration names it.
+        tl.to(el("b2"), { color: "#FF7A7A", duration: 0.5, ease: "power2.out" }, 6.5);
+
+        // 2 — attack steps
+        scene("attack", S2, S3);
+        enter(el("attack-title"), S2 + 0.15, 1.8, 0.7);
+        enter(el("step1"), S2 + 1.0, 2, 0.7);
+        enter(el("step2"), S2 + 4.2, 2, 0.7);
+        enter(el("step3"), S2 + 8.2, 2, 0.7);
+        tl.to(el("brand"), { opacity: 0, duration: 0.4, ease: "power2.inOut" }, S3 - 0.5);
+
+        // 3 — promise card
+        scene("promise", S3, S4);
+        tl.fromTo(el("promise-logo"), { opacity: 0, y: "1.5cqh", scale: 0.97 },
+          { opacity: 1, y: "0cqh", scale: 1, duration: 0.7, ease: "power3.out" }, S3 + 0.1);
+        enter(el("promise-title"), S3 + 0.35, 2.2, 0.8);
+        tl.to(el("brand"), { opacity: 1, duration: 0.4, ease: "power2.inOut" }, S4 - 0.2);
+
+        // 4 — check an address
+        scene("check", S4, S5);
+        enter(el("check-title"), S4 + 0.1, 1.8, 0.7);
+        enter(el("check-sub"), S4 + 0.55, 1.4, 0.65);
+        tl.fromTo(el("home"), { opacity: 0, y: "2.4cqh", scale: 0.985 },
+          { opacity: 1, y: "0cqh", scale: 1, duration: 0.9, ease: "power3.out" }, S4 + 0.9);
+        tl.to(el("home"), { scale: 1.045, duration: S5 - S4 - 1.6, ease: "none" }, S4 + 1.3);
+
+        // 5 — saved recipients
+        scene("saved", S5, S6);
+        enter(el("saved-title"), S5 + 0.1, 1.8, 0.7);
+        enter(el("saved-sub"), S5 + 0.5, 1.4, 0.65);
+        tl.fromTo(el("recipients"), { opacity: 0, y: "2.4cqh", scale: 0.985 },
+          { opacity: 1, y: "0cqh", scale: 1, duration: 0.85, ease: "power3.out" }, S5 + 0.85);
+        tl.to(el("recipients"), { scale: 1.04, duration: S6 - S5 - 1.6, ease: "none" }, S5 + 1.25);
+
+        // 6 — mismatch evidence
+        scene("mismatch", S6, S7);
+        enter(el("twin-title"), S6 + 0.1, 1.8, 0.7);
+        tl.fromTo(el("different"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, S6 + 1.2);
+        enter(el("twin"), S6 + 1.6, 2, 0.8);
+        enter(el("result"), S6 + 4.4, 1.6, 0.7);
+        enter(el("chip1"), S6 + 5.8, 1.2, 0.5);
+        enter(el("chip2"), S6 + 6.2, 1.2, 0.5);
+        enter(el("chip3"), S6 + 6.6, 1.2, 0.5);
+
+        // 7 — blocked
+        scene("blocked", S7, S8);
+        enter(el("block-title"), S7 + 0.1, 2, 0.75);
+        enter(el("button"), S7 + 1.1, 1.4, 0.65);
+        enter(el("block-note"), S7 + 1.9, 1.2, 0.6);
+
+        // 8 — match restored
+        scene("match", S8, S9);
+        enter(el("match-title"), S8 + 0.1, 1.8, 0.7);
+        tl.fromTo(el("ok"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, S8 + 1.1);
+        enter(el("twin-match"), S8 + 1.5, 2, 0.8);
+        enter(el("devnet"), S8 + 4.0, 1.2, 0.65);
+
+        // 9 — monitor
+        scene("monitor-sec", S9, S10);
+        enter(el("mon-title"), S9 + 0.1, 1.8, 0.7);
+        enter(el("mon-sub"), S9 + 0.5, 1.4, 0.65);
+        tl.fromTo(el("monitor"), { opacity: 0, y: "2.4cqh", scale: 0.985 },
+          { opacity: 1, y: "0cqh", scale: 1, duration: 0.9, ease: "power3.out" }, S9 + 0.9);
+        tl.to(el("monitor"), { scale: 1.04, duration: S10 - S9 - 1.7, ease: "none" }, S9 + 1.3);
+        tl.to(el("brand"), { opacity: 0, duration: 0.45, ease: "power2.inOut" }, S10 - 0.55);
+        tl.to(el("source"), { opacity: 0, duration: 0.45, ease: "power2.inOut" }, S10 - 0.55);
+
+        // 10 — close
+        scene("close", S10, END);
+        tl.fromTo(el("close-logo"), { opacity: 0, y: "1.5cqh", scale: 0.97 },
+          { opacity: 1, y: "0cqh", scale: 1, duration: 0.7, ease: "power3.out" }, S10 + 0.1);
+        enter(el("close-title"), S10 + 0.4, 2.2, 0.8);
+        enter(el("close-context"), S10 + 1.7, 1, 0.7);
+        enter(el("close-demo"), S10 + 2.7, 1, 0.7);
+
+        tl.fromTo(el("progress"), { scaleX: 0 }, { scaleX: 1, duration: END, ease: "none" }, 0);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["doppel-demo"] = tl;
+      })();
+    </script>
+  </div>
+</template>

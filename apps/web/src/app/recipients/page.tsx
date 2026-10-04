@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { NetworkSelect } from "../../components/NetworkSelect";
+import { Button } from "../../components/Button";
 import type { ImportPreview, RecipientRecord } from "@doppel/engine";
 import {
   addRecipientDraft,
@@ -75,18 +76,18 @@ export default function RecipientsPage() {
             required
           />
           <NetworkSelect id="recipient-network" value={cluster} onChange={setCluster} />
-          <button type="submit" className="h-11 rounded-[12px] bg-iris px-4 text-on-iris">
+          <Button type="submit" variant="primary">
             Review recipient
-          </button>
+          </Button>
         </form>
         {pending ? (
           <div className="mt-4 rounded-[12px] bg-raised p-4">
             <p>Review full address:</p>
             <p className="break-all font-mono">{pending.address}</p>
             <p className="text-sm text-muted">Source descriptions are your assertion, not identity verification.</p>
-            <button
-              type="button"
-              className="mt-3 h-11 rounded-[12px] bg-iris px-4 text-on-iris"
+            <Button
+              variant="primary"
+              className="mt-3"
               onClick={() => {
                 void confirmSavedRecipient(pending, "manual_review").then(() => {
                   setPending(null);
@@ -96,7 +97,7 @@ export default function RecipientsPage() {
               }}
             >
               Confirm this record
-            </button>
+            </Button>
           </div>
         ) : null}
         {message ? <p className="mt-3 text-sm text-review" role="status">{message}</p> : null}
@@ -132,44 +133,40 @@ export default function RecipientsPage() {
                   onChange={(event) => setNextAddress(event.target.value)}
                   placeholder="New full address"
                 />
-                <button type="submit" className="h-11 rounded-[12px] bg-iris px-4 text-on-iris">
+                <Button type="submit" variant="primary">
                   Review new address
-                </button>
+                </Button>
               </form>
             ) : (
               <div className="mt-3 flex flex-wrap gap-3">
-                {record.confirmationStatus === "unconfirmed" ? <button type="button"
-                  className="h-11 rounded-[12px] border border-line px-4" onClick={() => setPending(record)}>
+                {record.confirmationStatus === "unconfirmed" ? <Button variant="secondary" onClick={() => setPending(record)}>
                   Review confirmation
-                </button> : null}
-                <button
-                  type="button"
-                  className="h-11 rounded-[12px] border border-line px-4"
+                </Button> : null}
+                <Button
+                  variant="secondary"
                   onClick={() => {
                     setReviseId(record.id);
                     setNextAddress("");
                   }}
                 >
                   Change address
-                </button>
-                <button
-                  type="button"
-                  className="h-11 rounded-[12px] border border-line px-4"
+                </Button>
+                <Button
+                  variant="danger"
                   onClick={() => {
                     void deleteRecipient(record.id).then(() => { if (pending?.id === record.id) setPending(null); return refresh(); }).catch(reportError);
                   }}
                 >
                   Remove
-                </button>
+                </Button>
               </div>
             )}
           </article>
         ))}
       </div>
       <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          className="h-11 rounded-[12px] border border-line px-4"
+        <Button
+          variant="secondary"
           onClick={() => {
             void exportRecipients().then((json) => {
               const blob = new Blob([json], { type: "application/json" });
@@ -183,8 +180,8 @@ export default function RecipientsPage() {
           }}
         >
           Export
-        </button>
-        <label className="rounded-[12px] border border-line p-3">
+        </Button>
+        <label className="inline-flex min-h-11 cursor-pointer items-center rounded-[12px] border border-line-strong bg-raised px-4 text-[15px] font-medium text-text shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-[background-color,border-color] duration-150 hover:border-iris hover:bg-[#2a3157] active:translate-y-px active:bg-[#222848]">
           Preview an address-book file
           <input
             type="file"
@@ -210,11 +207,11 @@ export default function RecipientsPage() {
         <p>{importDraft.preview.accepted.length} new records, {importDraft.preview.duplicates.length} duplicates, {importDraft.preview.invalid.length} invalid entries.
           Existing records will not be replaced. All imported records need fresh confirmation.</p>
         <ul>{importDraft.preview.accepted.slice(0, 10).map((record, index) => <li key={index} className="break-all text-sm">{record.label}: {record.address}</li>)}</ul>
-        <button type="button" disabled={!importDraft.preview.accepted.length} className="min-h-11 rounded-[12px] bg-iris px-4 text-on-iris disabled:opacity-40"
+        <Button variant="primary" disabled={!importDraft.preview.accepted.length}
           onClick={() => { void importRecipients(importDraft.payload).then(async (result) => {
             setImportDraft(null); setMessage(`Imported ${result.accepted.length} unconfirmed records.`); await refresh();
-          }).catch(reportError); }}>Import reviewed records</button>
-        <button type="button" className="min-h-11 px-4 text-iris" onClick={() => setImportDraft(null)}>Cancel import</button>
+          }).catch(reportError); }}>Import reviewed records</Button>
+        <Button variant="ghost" onClick={() => setImportDraft(null)}>Cancel import</Button>
       </div> : null}
     </section>
   );

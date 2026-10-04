@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Doppel — demo</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #10142A; }
+      .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-main" id="root" data-composition-id="main" data-start="0" data-duration="90" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-scene" id="el-doppel-demo" class="clip scene" data-composition-id="doppel-demo" data-composition-src="compositions/frames/doppel-demo.html" data-start="0" data-duration="90" data-track-index="1" data-width="1920" data-height="1080"></div>
+
+      <!-- Narration: one clip per measured line so cuts land on speech boundaries -->
+      <hf-audio-group data-hf-id="hf-vogroup" id="el-vo">
+        <audio data-hf-id="hf-vo01" id="el-vo-01" src="assets/vo/line-01.wav" data-start="1" data-duration="2.752" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo02" id="el-vo-02" src="assets/vo/line-02.wav" data-start="4.202" data-duration="5.333" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo03" id="el-vo-03" src="assets/vo/line-03.wav" data-start="9.985" data-duration="12.139" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo04" id="el-vo-04" src="assets/vo/line-04.wav" data-start="22.574" data-duration="2.475" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo05" id="el-vo-05" src="assets/vo/line-05.wav" data-start="25.499" data-duration="10.069" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo06" id="el-vo-06" src="assets/vo/line-06.wav" data-start="36.018" data-duration="6.4" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo07" id="el-vo-07" src="assets/vo/line-07.wav" data-start="42.868" data-duration="10.197" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo08" id="el-vo-08" src="assets/vo/line-08.wav" data-start="53.515" data-duration="3.947" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo09" id="el-vo-09" src="assets/vo/line-09.wav" data-start="57.912" data-duration="7.04" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo10" id="el-vo-10" src="assets/vo/line-10.wav" data-start="65.402" data-duration="14.507" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo11" id="el-vo-11" src="assets/vo/line-11.wav" data-start="80.359" data-duration="5.611" data-volume="1"></audio>
+        <audio data-hf-id="hf-vo12" id="el-vo-12" src="assets/vo/line-12.wav" data-start="86.42" data-duration="2.027" data-volume="1"></audio>
+      </hf-audio-group>
+
+      <!-- BGM: original locally synthesized 90s bed, carved against the whole narration group -->
+      <audio data-hf-id="hf-bgm" id="el-bgm" src="assets/music-original.wav" data-start="0" data-duration="90" data-track-index="11" data-volume="0.26" data-fx-carve="{&quot;enabled&quot;:true,&quot;sources&quot;:[&quot;el-vo&quot;],&quot;strength&quot;:0.8}" data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;volume&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:0},{&quot;t&quot;:1.2,&quot;v&quot;:1},{&quot;t&quot;:86.5,&quot;v&quot;:1},{&quot;t&quot;:90,&quot;v&quot;:0}]}]}"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

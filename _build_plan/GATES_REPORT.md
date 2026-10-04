@@ -369,14 +369,14 @@ Builder authorized making the hosted core usable after Solami expiry. Implemente
 
 Primary partial evidence survives failover and conflict/dual-failure states remain review-required. Primary error details/credentials are not displayed. Public RPC failure cannot become a complete clean result. The fallback tests simulate access denial, unavailable envelopes, legitimate partial coverage, cooldown/recovery, primary evidence retention and cancellation.
 
-Monitor now supports a schema-validated historical mainnet snapshot bundled with deployment, forced to historical/stopped display with capture date. It survives worker downtime and serverless restarts because it is a deployment asset. Operator exporter refuses synthetic/replay/non-mainnet/empty input. Current bundle is explicitly empty: real monitored-mainnet capture awaits live integration. No synthetic data relabelled as mainnet. Before submission, record/review/export actual evidence and redeploy; actual hosted network availability remains unverified.
+Monitor now supports a schema-validated historical mainnet snapshot bundled with deployment, forced to historical/stopped display with capture date. It survives worker downtime and serverless restarts because it is a deployment asset. Operator exporter refuses synthetic/replay/non-mainnet/empty input. The current bundle holds a **real public-RPC mainnet capture** (25 transactions fetched, 0 failed after 429 backoff, 216 events parsed, 17 retained, last slot 303463012, 0 findings; coverage `partial`). No synthetic data relabelled as mainnet. Hosted availability is verified at `https://doppel-tau.vercel.app/api/monitor`; a live Solami stream remains unverified.
 
 Checks:
 ```text
-pnpm test -> 26 files, 141 passed
+pnpm test -> 26 files, 142 passed
 pnpm typecheck -> all workspaces Done, exit 0
 pnpm lint -> exit 0
-$env:PLAYWRIGHT_REUSE_SERVER='1'; pnpm test:e2e -> 17 passed (1.2m)
+$env:PLAYWRIGHT_REUSE_SERVER='1'; pnpm test:e2e -> 18 passed (1.0m)
 pnpm --filter @doppel/web build -> compiled successfully, generated 10/10 pages, exit 0
 ```
 

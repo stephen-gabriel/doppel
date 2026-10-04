@@ -5,6 +5,9 @@
   --color-ink: #181d38;
   --color-raised: #20264a;
   --color-line: #2e3562;
+  /* Interactive borders need to be visibly lighter than panel edges, otherwise
+     outlined controls read as plain text on the dark background. */
+  --color-line-strong: #454d85;
   --color-text: #eceffb;
   --color-muted: #a3aad0;
   --color-iris: #8f9cff;
