@@ -1,0 +1,478 @@
+<template>
+  <div data-hf-id="hf-p-root" id="root" data-composition-id="doppel-pitch" data-width="1920" data-height="1080" data-duration="116" data-fps="30">
+    <style>
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("assets/bricolage.woff2") format("woff2");
+        font-weight: 400 600;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/mono.woff2") format("woff2");
+        font-weight: 400 600;
+        font-style: normal;
+      }
+      #root {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        container-type: size;
+        isolation: isolate;
+        color: #ECEFFB;
+        font-family: "Bricolage Grotesque";
+        pointer-events: none;
+      }
+      #root * { box-sizing: border-box; }
+      #root img { display: block; max-width: none; }
+      #root h1, #root h2, #root p { margin: 0; }
+      #root [data-scene-layer] { position: absolute; inset: 0; }
+      /* Only one scene is ever on screen; hidden scenes are truly hidden, not just transparent. */
+      #root .sc { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+      #root .em { color: #8F9CFF; }
+      #root .danger { color: #FF7A7A; }
+      #p-ground { background: #10142A; }
+      #p-brand {
+        position: absolute;
+        left: 5cqw; top: 6.3cqh; height: 4.8cqh;
+        display: flex; align-items: center; gap: 0.85cqw;
+        font-size: 1.8cqw; font-weight: 600; letter-spacing: -0.02em;
+      }
+      #p-brand img { width: 2.45cqw; height: 2.45cqw; object-fit: contain; }
+      #p-progress {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+        background: rgba(143, 156, 255, 0.14); transform-origin: left center;
+      }
+      #p-progress i { display: block; width: 100%; height: 100%; background: #8F9CFF; }
+
+      /* Centering frame shared by the statement scenes. */
+      #root .center {
+        display: flex; flex-direction: column; justify-content: center;
+        padding: 0 9cqw; height: 100%;
+      }
+      #root .rule {
+        width: 3.125cqw; height: 4px; border-radius: 2px;
+        background: #8F9CFF; transform-origin: left center; margin-bottom: 3.2cqh;
+      }
+      #root .plate {
+        position: relative; overflow: hidden; border-radius: 14px;
+        outline: 1.5px solid rgba(143, 156, 255, 0.2);
+        background: rgba(143, 156, 255, 0.04);
+      }
+      #root .plate img { width: 100%; height: 100%; object-fit: contain; }
+      /* Scenes 09/10 put a capture in a full-width column, so the plate box is ~5:1
+         against a 1.44 capture. contain then letterboxes the screenshot into the middle
+         ~30% of the frame and the plate reads as near-empty (mean luma 6.6/9.4 vs a 2.6
+         background). Matching the box to the capture's own aspect makes contain fill it
+         exactly, so the whole 2880x2000 screenshot is legible with no empty margins. */
+      #p-safety .plate,
+      #p-ships .plate {
+        width: 36cqw; height: auto; aspect-ratio: 2880 / 2000;
+        align-self: center; margin-top: 3.6cqh;
+      }
+      #root .mono { font-family: "JetBrains Mono"; letter-spacing: 0.01em; }
+      #root .chip {
+        display: inline-flex; align-items: center; gap: 0.7cqw;
+        padding: 0.9cqh 1.6cqw; border-radius: 999px;
+        font-size: 1.35cqw; letter-spacing: 0.01em;
+        background: rgba(143, 156, 255, 0.07);
+        outline: 1.5px solid rgba(143, 156, 255, 0.2);
+      }
+      #root .chip b { font-weight: 600; }
+      #root .led { width: 0.7cqw; height: 0.7cqw; border-radius: 50%; background: #8F9CFF; }
+      #root .led.warn { background: #FFC46B; }
+
+      /* 01 — hook */
+      #p-hook h1 { font-size: 5.6cqw; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; max-width: 76cqw; }
+      #p-hook .sub { margin-top: 3.4cqh; font-size: 1.85cqw; color: #A3AAD0; letter-spacing: 0.01em; }
+
+      /* 02 — mechanic */
+      #p-mechanic .stack { display: flex; flex-direction: column; gap: 2.2cqh; margin-top: 1cqh; }
+      #p-mechanic .row {
+        display: flex; align-items: center; gap: 1.6cqw;
+        font-family: "JetBrains Mono"; font-size: 1.7cqw;
+        padding: 1.6cqh 2cqw; border-radius: 12px;
+        background: rgba(143, 156, 255, 0.06);
+        outline: 1.5px solid rgba(143, 156, 255, 0.18);
+      }
+      #p-mechanic .row .tag {
+        min-width: 13cqw; color: #A3AAD0; font-family: "Bricolage Grotesque";
+        font-size: 1.25cqw; letter-spacing: 0.02em;
+      }
+      #p-mechanic .edge { color: #8F9CFF; }
+      #p-mechanic .mid { color: #A3AAD0; }
+      #p-mechanic .tags { display: flex; gap: 1.2cqw; margin-top: 3.2cqh; }
+
+      /* 03 — wait */
+      #p-wait h2 { font-size: 6.4cqw; font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; max-width: 70cqw; }
+      #p-caret { display: inline-block; width: 0.7cqw; height: 5.2cqw; background: #8F9CFF; vertical-align: -0.6cqh; margin-left: 0.6cqw; }
+
+      /* 04 — why now */
+      #p-whynow .list { display: flex; flex-direction: column; gap: 2.6cqh; margin-top: 1.2cqh; }
+      #p-whynow .item { display: flex; gap: 1.8cqw; align-items: flex-start; }
+      #p-whynow .n {
+        flex: 0 0 auto; width: 3.2cqw; height: 3.2cqw; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.25cqw; font-weight: 600; color: #10142A; background: #8F9CFF;
+      }
+      #p-whynow .t { font-size: 2.15cqw; font-weight: 600; letter-spacing: -0.015em; }
+      #p-whynow .s { margin-top: 0.5cqh; font-size: 1.6cqw; color: #A3AAD0; line-height: 1.45; max-width: 66cqw; }
+      #p-whynow .sample {
+        margin-top: 3.6cqh; padding: 1.8cqh 2.2cqw; border-radius: 12px;
+        font-family: "JetBrains Mono"; font-size: 2.1cqw; letter-spacing: 0.02em;
+        background: rgba(143, 156, 255, 0.06);
+        outline: 1.5px solid rgba(143, 156, 255, 0.18);
+      }
+      #p-whynow .sample u { text-decoration: none; color: #FFC46B; padding: 0 0.2cqw; }
+
+      /* 05 — insight */
+      #p-insight .lead { font-size: 2cqw; color: #A3AAD0; letter-spacing: 0.02em; margin-bottom: 2.6cqh; }
+      #p-insight h2 { font-size: 5.4cqw; font-weight: 600; letter-spacing: -0.03em; line-height: 1.12; max-width: 74cqw; }
+      #p-insight .concl { margin-top: 3.6cqh; font-size: 2.6cqw; font-weight: 600; letter-spacing: -0.02em; color: #A3AAD0; max-width: 68cqw; }
+
+      /* 06 — principle */
+      #p-principle .frame {
+        border-left: 3px solid #8F9CFF; padding: 1cqh 0 1cqh 3cqw;
+      }
+      #p-principle h2 { font-size: 5cqw; font-weight: 600; letter-spacing: -0.03em; line-height: 1.14; max-width: 76cqw; }
+      #p-principle .note { margin-top: 3.4cqh; font-size: 1.7cqw; color: #A3AAD0; }
+
+      /* 07 — product */
+      #p-product .cols { display: flex; gap: 5cqw; align-items: center; height: 100%; padding: 0 7cqw; }
+      #p-product .left { flex: 0 0 40cqw; }
+      #p-product h2 { font-size: 3.5cqw; font-weight: 600; letter-spacing: -0.025em; line-height: 1.14; }
+      #p-product .pts { margin-top: 3cqh; display: flex; flex-direction: column; gap: 1.8cqh; }
+      #p-product .pt { display: flex; gap: 1.2cqw; align-items: flex-start; font-size: 1.65cqw; color: #A3AAD0; line-height: 1.45; }
+      #p-product .pt b { color: #ECEFFB; font-weight: 600; }
+      #p-product .right { flex: 1 1 auto; }
+      #p-product .plate { height: 62cqh; }
+
+       /* 08 — blocked */
+       #p-blocked h2 { font-size: 4.4cqw; font-weight: 600; letter-spacing: -0.03em; line-height: 1.14; max-width: 62cqw; }
+       #p-blocked .row { display: flex; gap: 3cqw; align-items: center; margin-top: 5cqh; }
+       #p-blocked .plate { flex: 0 0 auto; width: 30cqw; aspect-ratio: 532/88; height: auto; }
+       #p-blocked .plate.alt { width: 36cqw; aspect-ratio: 2028/120; }
+       #p-blocked .state { font-size: 1.5cqw; color: #A3AAD0; }
+
+       /* 09 — safety */
+       #p-safety h2 { font-size: 4.6cqw; font-weight: 600; letter-spacing: -0.03em; }
+       #p-safety .chips { display: flex; gap: 1.3cqw; margin-top: 3.4cqh; }
+       #p-safety .chips .chip.warn { background: rgba(255, 196, 107, 0.08); outline-color: rgba(255, 196, 107, 0.28); }
+       #p-safety .chips .chip.warn .led { background: #FFC46B; }
+       #p-safety .foot { margin-top: 2.4cqh; font-size: 1.5cqw; color: #A3AAD0; }
+
+      /* 10 — ships as */
+      #p-ships .cards { display: flex; gap: 2.4cqw; margin-top: 1.4cqh; }
+      #p-ships .card {
+        flex: 1 1 0; padding: 2.6cqh 2.4cqw; border-radius: 14px;
+        background: rgba(143, 156, 255, 0.06);
+        outline: 1.5px solid rgba(143, 156, 255, 0.18);
+      }
+      #p-ships .card .k { font-size: 1.2cqw; letter-spacing: 0.06em; text-transform: uppercase; color: #8F9CFF; }
+      #p-ships .card .h { margin-top: 1.2cqh; font-size: 2cqw; font-weight: 600; letter-spacing: -0.015em; }
+      #p-ships .card .d { margin-top: 1cqh; font-size: 1.45cqw; color: #A3AAD0; line-height: 1.45; }
+
+      /* 11 — why me */
+      #p-whyme .cols { display: flex; gap: 5cqw; align-items: center; height: 100%; padding: 0 7cqw; }
+      #p-whyme .left { flex: 0 0 42cqw; }
+      #p-whyme h2 { font-size: 3.3cqw; font-weight: 600; letter-spacing: -0.025em; line-height: 1.16; }
+      #p-whyme .pts { margin-top: 2.8cqh; display: flex; flex-direction: column; gap: 1.5cqh; }
+      #p-whyme .pt { display: flex; gap: 1.1cqw; font-size: 1.6cqw; color: #A3AAD0; line-height: 1.45; }
+      #p-whyme .right { flex: 1 1 auto; }
+      #p-whyme .plate { height: 54cqh; }
+
+      /* 12 — close */
+      #p-close { align-items: center; text-align: center; }
+      #p-close .logo { display: flex; align-items: center; gap: 1cqw; justify-content: center; }
+      #p-close .logo img { width: 3.4cqw; height: 3.4cqw; object-fit: contain; }
+      #p-close .logo span { font-size: 2.4cqw; font-weight: 600; letter-spacing: -0.02em; }
+      #p-close .stats { display: flex; gap: 1.3cqw; margin: 3.6cqh 0; justify-content: center; }
+      #p-close h2 { font-size: 4.4cqw; font-weight: 600; letter-spacing: -0.03em; line-height: 1.14; max-width: 68cqw; }
+      #p-close .url { margin-top: 3.4cqh; font-family: "JetBrains Mono"; font-size: 1.5cqw; color: #A3AAD0; }
+    </style>
+
+    <div data-hf-id="hf-p-ground" id="p-ground" class="clip" data-scene-layer="ground" data-start="0" data-duration="116" data-track-index="0"></div>
+
+    <div data-hf-id="hf-p-content" id="p-content" class="clip" data-scene-layer="content" data-start="0" data-duration="116" data-track-index="1">
+      <div data-hf-id="hf-p-brand" id="p-brand"><img data-hf-id="hf-p-brandimg" src="assets/doppel-logo.svg" alt=""> <span data-hf-id="hf-p-brandtxt">Doppel</span></div>
+
+      <section data-hf-id="hf-p-hook" id="p-hook" class="sc center" aria-label="Anyone can write to your wallet history">
+        <div data-hf-id="hf-p-hookrule" id="p-hook-rule" class="rule"></div>
+        <h1 data-hf-id="hf-p-hooktitle" id="p-hook-title">Anyone can put an address into <span class="em">your wallet history</span>.</h1>
+        <p data-hf-id="hf-p-hooksub" id="p-hook-sub" class="sub">That single fact is the whole attack.</p>
+      </section>
+
+      <section data-hf-id="hf-p-mechanic" id="p-mechanic" class="sc center" aria-label="How the lookalike gets into your history">
+        <div data-hf-id="hf-p-mechrule" class="rule"></div>
+        <div data-hf-id="hf-p-stack" id="p-stack" class="stack">
+          <div data-hf-id="hf-p-rowa" id="p-row-a" class="row">
+            <span class="tag">You paid before</span>
+            <span class="edge">4yfu</span><span class="mid">48qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnh</span><span class="edge">Y</span>
+          </div>
+          <div data-hf-id="hf-p-rowb" id="p-row-b" class="row">
+            <span class="tag">Now in your history</span>
+            <span class="edge">4yfu</span><span class="mid" id="p-mid-b">QCL4fnNfSbBgqFcPTFn5GGZABDaEFQLhGpwjizc</span><span class="edge">Y</span>
+          </div>
+        </div>
+        <div data-hf-id="hf-p-tags" id="p-tags" class="tags">
+          <span data-hf-id="hf-p-chip1" class="chip"><i class="led"></i>0.00001 SOL &mdash; worthless dust</span>
+          <span data-hf-id="hf-p-chip2" class="chip"><i class="led"></i>Everything a wallet displays matches</span>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-p-wait" id="p-wait" class="sc center" aria-label="It only has to wait for you to copy">
+        <h2 data-hf-id="hf-p-waittitle" id="p-wait-title">Now it just has to wait for you to <span class="em">copy</span> it.<span data-hf-id="hf-p-caret" id="p-caret"></span></h2>
+      </section>
+
+      <section data-hf-id="hf-p-whynow" id="p-whynow" class="sc center" aria-label="Why this is a problem now">
+        <div data-hf-id="hf-p-whynowrule" class="rule"></div>
+        <div data-hf-id="hf-p-list" id="p-list" class="list">
+          <div data-hf-id="hf-p-item1" id="p-item1" class="item">
+            <div class="n">01</div>
+            <div><div data-hf-id="hf-p-t1" class="t">Grinding became a commodity</div><div data-hf-id="hf-p-s1" class="s">Vanity address generation was a theoretical attack. It is now a service you can buy.</div></div>
+          </div>
+          <div data-hf-id="hf-p-item2" id="p-item2" class="item">
+            <div class="n">02</div>
+            <div><div data-hf-id="hf-p-t2" class="t">Copy-from-history became the default</div><div data-hf-id="hf-p-s2" class="s">Reusing an address from activity is how most people send a repeat payment.</div></div>
+          </div>
+          <div data-hf-id="hf-p-item3" id="p-item3" class="item">
+            <div class="n">03</div>
+            <div><div data-hf-id="hf-p-t3" class="t">The format punishes you for it</div><div data-hf-id="hf-p-s3" class="s">Base58 is case-sensitive and unchecksummed. One wrong character is a different wallet.</div></div>
+          </div>
+        </div>
+        <div data-hf-id="hf-p-sample" id="p-sample" class="sample">4yfu<u>4</u>8qwim7hGzD3Nphzd2A6ThydzysfKi4wBPFSgnhY</div>
+      </section>
+
+      <section data-hf-id="hf-p-insight" id="p-insight" class="sc center" aria-label="Wallet history is attacker-writable">
+        <p data-hf-id="hf-p-lead" id="p-lead" class="lead">Here is what I noticed.</p>
+        <h2 data-hf-id="hf-p-insighttitle" id="p-insight-title">Wallet history is <span class="em">attacker-writable</span>.</h2>
+        <p data-hf-id="hf-p-concl" id="p-concl" class="concl">So transaction history is not proof of anything.</p>
+      </section>
+
+      <section data-hf-id="hf-p-principle" id="p-principle" class="sc center" aria-label="The principle behind Doppel">
+        <div data-hf-id="hf-p-frame" id="p-frame" class="frame">
+          <h2 data-hf-id="hf-p-princetitle" id="p-principle-title">Verification has to come from somewhere the attacker <span class="em">cannot write to</span>.</h2>
+        </div>
+        <p data-hf-id="hf-p-princnote" id="p-principle-note" class="note">Not from the ledger. From a channel only you control.</p>
+      </section>
+
+      <section data-hf-id="hf-p-product" id="p-product" class="sc" aria-label="What Doppel does">
+        <div class="cols">
+          <div data-hf-id="hf-p-pleft" class="left">
+            <h2 data-hf-id="hf-p-ptitle" id="p-product-title">An address book you confirmed, checked at the moment of payment.</h2>
+            <div class="pts">
+              <div data-hf-id="hf-p-pt1" class="pt"><i class="led"></i><span><b>Saved recipients</b> you verified independently, not ones a stranger wrote into your history.</span></div>
+              <div data-hf-id="hf-p-pt2" class="pt"><i class="led"></i><span><b>Character-level diff</b> showing exactly which glyphs match and which differ.</span></div>
+              <div data-hf-id="hf-p-pt3" class="pt"><i class="led"></i><span><b>Before the wallet is asked</b> to sign &mdash; not after.</span></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-p-pright" class="right">
+            <div data-hf-id="hf-p-pplate" id="p-product-plate" class="plate"><img data-hf-id="hf-p-pimg" src="assets/prepare-mismatch.png" alt="Doppel comparing a pasted address against a saved recipient"></div>
+          </div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-p-blocked" id="p-blocked" class="sc center" aria-label="Unresolved history blocks the payment">
+        <h2 data-hf-id="hf-p-btitle" id="p-blocked-title">Unresolved history? <span class="danger">The payment is blocked.</span></h2>
+        <div class="row">
+          <div data-hf-id="hf-p-bplate1" id="p-blocked-plate" class="plate"><img data-hf-id="hf-p-bimg1" src="assets/blocked-button.png" alt="Signing disabled"></div>
+          <div data-hf-id="hf-p-bplate2" id="p-blocked-plate2" class="plate alt"><img data-hf-id="hf-p-bimg2" src="assets/result-mismatch.png" alt="Mismatch evidence"></div>
+          <div data-hf-id="hf-p-bstate" id="p-blocked-state" class="state">The signing button never enables.<br>The wallet is never asked.</div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-p-safety" id="p-safety" class="sc center" aria-label="Mainnet is read-only">
+        <h2 data-hf-id="hf-p-stitle" id="p-safety-title">No funds. No signing. No risk.</h2>
+        <div data-hf-id="hf-p-schips" id="p-safety-chips" class="chips">
+          <span data-hf-id="hf-p-schip1" class="chip"><i class="led"></i>Mainnet &mdash; <b>strictly read-only</b></span>
+          <span data-hf-id="hf-p-schip2" class="chip warn"><i class="led"></i>Devnet &mdash; the only write path</span>
+        </div>
+        <div data-hf-id="hf-p-splate" id="p-safety-plate" class="plate"><img data-hf-id="hf-p-simg" src="assets/prepare-match.png" alt="Matching recipient clearing the check"></div>
+        <p data-hf-id="hf-p-sfoot" id="p-safety-foot" class="foot">Reviewers can exercise the entire product with an empty wallet.</p>
+      </section>
+
+      <section data-hf-id="hf-p-ships" id="p-ships" class="sc center" aria-label="How Doppel ships">
+        <div data-hf-id="hf-p-shipsrule" class="rule"></div>
+        <div data-hf-id="hf-p-cards" id="p-cards" class="cards">
+          <div data-hf-id="hf-p-card1" class="card">
+            <div class="k">Reference</div>
+            <div data-hf-id="hf-p-cardh1" class="h">Web app</div>
+            <div class="d">The full product you can open right now.</div>
+          </div>
+          <div data-hf-id="hf-p-card2" class="card">
+            <div class="k">Embeddable</div>
+            <div data-hf-id="hf-p-cardh2" class="h">SDK + widget</div>
+            <div class="d">Drop the same check into your own product.</div>
+          </div>
+          <div data-hf-id="hf-p-card3" class="card">
+            <div class="k">Passive</div>
+            <div data-hf-id="hf-p-cardh3" class="h">Monitor</div>
+            <div class="d">Watches your saved recipients for new activity.</div>
+          </div>
+        </div>
+        <div data-hf-id="hf-p-splate2" id="p-ships-plate" class="plate"><img data-hf-id="hf-p-simg2" src="assets/monitor.png" alt="Recipient monitor"></div>
+      </section>
+
+      <section data-hf-id="hf-p-whyme" id="p-whyme" class="sc" aria-label="Who is building Doppel">
+        <div class="cols">
+          <div data-hf-id="hf-p-mleft" class="left">
+            <h2 data-hf-id="hf-p-mtitle" id="p-whyme-title">Solo founder. No team, no pre-existing company.</h2>
+            <div class="pts">
+              <div data-hf-id="hf-p-mpt1" class="pt"><i class="led"></i><span>I found this by paying attention to something wallets treat as trustworthy.</span></div>
+              <div data-hf-id="hf-p-mpt2" class="pt"><i class="led"></i><span>I designed the threat model, the verification model and the safety boundaries.</span></div>
+              <div data-hf-id="hf-p-mpt3" class="pt"><i class="led"></i><span>Mainnet stays read-only by choice, not by limitation.</span></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-p-mright" class="right">
+            <div data-hf-id="hf-p-mplate" id="p-whyme-plate" class="plate"><img data-hf-id="hf-p-mimg" src="assets/home.png" alt="The deployed Doppel app"></div>
+          </div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-p-close" id="p-close" class="sc center" aria-label="Doppel closing">
+        <div data-hf-id="hf-p-logo" id="p-logo" class="logo"><img data-hf-id="hf-p-logoimg" src="assets/doppel-logo.svg" alt=""> <span>Doppel</span></div>
+        <div data-hf-id="hf-p-stats" id="p-stats" class="stats">
+          <span data-hf-id="hf-p-stat1" class="chip">Zero users</span>
+          <span data-hf-id="hf-p-stat2" class="chip">Zero revenue</span>
+          <span data-hf-id="hf-p-stat3" class="chip">Pre-traction, and honest about it</span>
+        </div>
+        <h2 data-hf-id="hf-p-ctitle" id="p-close-title">Check the recipient <span class="em">before</span> you sign.</h2>
+        <p data-hf-id="hf-p-url" id="p-url" class="url">doppel-tau.vercel.app</p>
+      </section>
+
+      <div data-hf-id="hf-p-progress" id="p-progress"><i data-hf-id="hf-p-progressfill"></i></div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        function el(name) { return document.getElementById("p-" + name); }
+        var tl = gsap.timeline({ paused: true });
+
+        // Scene boundaries come from the measured per-line narration durations
+        // (assets/vo/timeline.json). Every boundary lands inside an inter-line silence.
+        var S1 = 0, S2 = 3.84, S3 = 16.08, S4 = 19.12, S5 = 38.6, S6 = 49.51,
+            S7 = 54.14, S8 = 68.92, S9 = 72.23, S10 = 79.72, S11 = 91.01,
+            S12 = 103.11, END = 116;
+
+        // One scene visible at a time; autoAlpha keeps hidden scenes out of layout and paint.
+        function scene(name, start, end) {
+          var node = el(name);
+          tl.set(node, { autoAlpha: 1 }, start);
+          if (end < END) tl.to(node, { autoAlpha: 0, duration: 0.45, ease: "power2.inOut" }, end - 0.45);
+        }
+        function enter(node, at, fromY, dur) {
+          tl.fromTo(node, { opacity: 0, y: (fromY || 2) + "cqh" },
+            { opacity: 1, y: "0cqh", duration: dur || 0.7, ease: "power3.out" }, at);
+        }
+        function plateIn(node, at, hold) {
+          tl.fromTo(node, { opacity: 0, y: "2.2cqh", scale: 0.985 },
+            { opacity: 1, y: "0cqh", scale: 1, duration: 0.85, ease: "power3.out" }, at);
+          if (hold > 0) tl.to(node, { scale: 1.04, duration: hold, ease: "none" }, at + 0.9);
+        }
+
+        tl.fromTo(el("brand"), { opacity: 0, y: "1cqh" }, { opacity: 1, y: "0cqh", duration: 0.5, ease: "power2.out" }, 0.15);
+
+        // 1 — hook
+        scene("hook", S1, S2);
+        tl.fromTo(el("hook-rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.65, ease: "power2.out" }, 0.3);
+        enter(el("hook-title"), 0.45, 2.2, 0.75);
+        enter(el("hook-sub"), 2.3, 1.2, 0.65);
+
+        // 2 — mechanic
+        scene("mechanic", S2, S3);
+        tl.fromTo(el("mechanic").querySelector(".rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, S2 + 0.1);
+        enter(el("row-a"), S2 + 0.8, 1.6, 0.65);
+        enter(el("row-b"), S2 + 5.6, 1.6, 0.65);
+        enter(el("tags"), S2 + 8.6, 1.4, 0.7);
+        // Light the differing middle only once the narration has named the dust transfer.
+        tl.to(el("mid-b"), { color: "#FF7A7A", duration: 0.55, ease: "power2.out" }, S2 + 7.2);
+
+        // 3 — it only has to wait
+        scene("wait", S3, S4);
+        enter(el("wait-title"), S3 + 0.15, 2.4, 0.8);
+        tl.fromTo(el("caret"), { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, S3 + 1.5);
+        tl.to(el("caret"), { opacity: 0.25, duration: 0.6, repeat: 3, yoyo: true, ease: "power1.inOut" }, S3 + 1.9);
+
+        // 4 — why now
+        scene("whynow", S4, S5);
+        tl.fromTo(el("whynow").querySelector(".rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out", immediateRender: false }, S4 + 0.1);
+        enter(el("item1"), S4 + 0.9, 1.8, 0.7);
+        enter(el("item2"), S4 + 6.4, 1.8, 0.7);
+        enter(el("item3"), S4 + 12.0, 1.8, 0.7);
+        enter(el("sample"), S4 + 16.4, 1.4, 0.7);
+        // The single wrong glyph lands on the narration's last beat.
+        tl.fromTo(el("sample").querySelector("u"), { color: "#FFC46B", opacity: 0.25 },
+          { color: "#FFC46B", opacity: 1, duration: 0.6, ease: "power2.out" }, S4 + 17.4);
+        tl.to(el("brand"), { opacity: 0, duration: 0.4, ease: "power2.inOut" }, S5 - 0.5);
+
+        // 5 — the turn
+        scene("insight", S5, S6);
+        enter(el("lead"), S5 + 0.1, 1.2, 0.6);
+        enter(el("insight-title"), S5 + 1.4, 2.4, 0.85);
+        enter(el("concl"), S5 + 6.6, 1.8, 0.75);
+
+        // 6 — principle
+        scene("principle", S6, S7);
+        enter(el("frame"), S6 + 0.15, 2, 0.75);
+        enter(el("principle-title"), S6 + 0.45, 2.4, 0.85);
+        enter(el("principle-note"), S6 + 2.6, 1.2, 0.65);
+        tl.to(el("brand"), { opacity: 1, duration: 0.4, ease: "power2.inOut" }, S6 + 0.2);
+
+        // 7 — what Doppel does
+        scene("product", S7, S8);
+        enter(el("product-title"), S7 + 0.1, 1.8, 0.7);
+        enter(el("product").querySelectorAll(".pt")[0], S7 + 0.7, 1.4, 0.6);
+        enter(el("product").querySelectorAll(".pt")[1], S7 + 2.6, 1.4, 0.6);
+        enter(el("product").querySelectorAll(".pt")[2], S7 + 4.5, 1.4, 0.6);
+        plateIn(el("product-plate"), S7 + 0.8, S8 - S7 - 2.2);
+
+        // 8 — blocked
+        scene("blocked", S8, S9);
+        enter(el("blocked-title"), S8 + 0.1, 2.2, 0.75);
+        enter(el("blocked-plate"), S8 + 1.0, 1.4, 0.6);
+        enter(el("blocked-plate2"), S8 + 1.35, 1.4, 0.6);
+        enter(el("blocked-state"), S8 + 1.9, 1.2, 0.6);
+
+        // 9 — safety posture
+        scene("safety", S9, S10);
+        enter(el("safety-title"), S9 + 0.1, 1.8, 0.7);
+        enter(el("safety-chips"), S9 + 0.8, 1.4, 0.65);
+        plateIn(el("safety-plate"), S9 + 1.5, S10 - S9 - 3.0);
+        enter(el("safety-foot"), S9 + 2.6, 1, 0.6);
+
+        // 10 — what it ships as
+        scene("ships", S10, S11);
+        tl.fromTo(el("ships").querySelector(".rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out", immediateRender: false }, S10 + 0.1);
+        enter(el("cards").children[0], S10 + 0.7, 1.8, 0.65);
+        enter(el("cards").children[1], S10 + 2.6, 1.8, 0.65);
+        enter(el("cards").children[2], S10 + 4.5, 1.8, 0.65);
+        plateIn(el("ships-plate"), S10 + 6.4, S11 - S10 - 7.4);
+
+        // 11 — why me
+        scene("whyme", S11, S12);
+        enter(el("whyme-title"), S11 + 0.1, 1.8, 0.7);
+        enter(el("whyme").querySelectorAll(".pt")[0], S11 + 0.8, 1.4, 0.6);
+        enter(el("whyme").querySelectorAll(".pt")[1], S11 + 3.4, 1.4, 0.6);
+        enter(el("whyme").querySelectorAll(".pt")[2], S11 + 6.0, 1.4, 0.6);
+        plateIn(el("whyme-plate"), S11 + 0.8, S12 - S11 - 2.2);
+        tl.to(el("brand"), { opacity: 0, duration: 0.4, ease: "power2.inOut" }, S11 + 0.3);
+
+        // 12 — close
+        scene("close", S12, END);
+        tl.fromTo(el("logo"), { opacity: 0, y: "1.4cqh", scale: 0.97 },
+          { opacity: 1, y: "0cqh", scale: 1, duration: 0.7, ease: "power3.out" }, S12 + 0.1);
+        enter(el("stats"), S12 + 0.7, 1.4, 0.65);
+        enter(el("close-title"), S12 + 3.4, 2.2, 0.8);
+        enter(el("url"), S12 + 6.6, 1, 0.65);
+
+        tl.fromTo(el("progress"), { scaleX: 0 }, { scaleX: 1, duration: END, ease: "none" }, 0);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["doppel-pitch"] = tl;
+      })();
+    </script>
+  </div>
+</template>

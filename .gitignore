@@ -53,3 +53,11 @@ videos/**/frame.md
 videos/**/STORYBOARD.md
 videos/**/audio_meta.json
 videos/**/assets/font-*.woff2
+
+# Render/verification scratch. Regenerable on demand, never part of a submission:
+#   render_log.txt  per-render frame log
+#   zoom/           `hyperframes snapshot --zoom` element crops used for QC
+#   verify/         throwaway frame dumps written by ad-hoc measurement scripts
+videos/**/render_log.txt
+videos/**/zoom/
+videos/**/verify/
