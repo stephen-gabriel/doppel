@@ -4,6 +4,19 @@ Check that your next payment goes to the recipient you intended.
 
 M2 takeover: real Ed25519 keys, strict transaction inspection, sign-only wallet integration and explicit devnet broadcasting. Mainnet stays read-only. Solami is not activated.
 
+## Quickstart
+
+Mainnet checking needs **no API key, no account and no funds**.
+
+```bash
+pnpm install
+pnpm --filter @doppel/web dev
+```
+
+Open http://localhost:3000 and use **Check an address**. History reads go to public Solana mainnet-beta RPC — `PUBLIC_RPC_URL`, defaulting to `https://api.mainnet-beta.solana.com`. There is nothing to configure and nothing to buy.
+
+Requires Node 24.13+ and pnpm 10.18.2. Full setup, tests and walkthroughs are below.
+
 ## Status
 
 - Disposable keys use `Keypair.generate()` (64-byte secret). The earlier invalid encoded-secret address was discarded and never funded.
@@ -98,6 +111,29 @@ Production web deployment defaults to the bundled historical mainnet capture; `M
 ## Hosted fallback for judging
 
 The core remains usable independently of a Pro stream. Check supports a configured standard Solami RPC primary with public-mainnet RPC failover; missing configuration/access failures are visibly labelled. Provider downtime does not remove the local recipient comparison. Public RPC can also be limited/unavailable, in which case history is explicitly unknown.
+
+### Optional: bring your own Solami RPC
+
+You do not need this to use the app. Public RPC rate-limits aggressively (5 rps by default, `RPC_RPS_LIMIT`); if you have a Solami endpoint you can raise that.
+
+| Variable | Purpose |
+| --- | --- |
+| `MAINNET_PROVIDER` | Set to `solami` to opt in. Any other value keeps public RPC. |
+| `SOLAMI_RPC_URL` | The full authenticated HTTPS URL from the Solami dashboard. |
+| `SOLAMI_RPC_RPS_LIMIT` | Requests per second for the primary. Default 5. |
+
+Set these in `apps/web/.env.local` or the process environment. Two deliberate limits are worth knowing:
+
+- **The URL host is restricted to `solami.dev`.** Any other host is ignored and the app stays on public RPC rather than sending traffic to an unvetted endpoint. A Helius or QuickNode key cannot be used in this slot.
+- **It reports `solami-rpc (not yet verified)`.** No Solami account has been activated, so no endpoint or response shape has been confirmed. Treat this as configuration plumbing, not a validated integration.
+
+Check what is actually live at any time:
+
+```bash
+curl -s http://localhost:3000/api/status
+```
+
+`provider` and `providerRouting` report the live provider and any active fallback; `solamiIntegration` currently reads `rpc_configurable_stream_pending`.
 
 Monitor supports a reviewed historical mainnet snapshot bundled at deployment. Live/offline/captured states and capture dates are distinct. The bundle now contains a real capture taken from live mainnet public RPC (see `apps/web/src/data/monitor-capture.json`), forced to historical/stopped and never presented as live activity. It records zero poisoning findings for the observed wallet, which is the honest result; the synthetic replay is never substituted as mainnet evidence. See `docs/RELEASE_GUIDE.md` for configuration, capture export and limits.
 
