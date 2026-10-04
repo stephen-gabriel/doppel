@@ -60,7 +60,7 @@ Free live harness probe (generates disposable keys in memory, prints no secrets;
 node --experimental-strip-types tools/harness/tests/devnet-verification.sample.ts
 ```
 
-Actual gate evidence, the confirmed builder transaction and earlier failed attempts are recorded in `_build_plan/GATES_REPORT.md`. Synthetic history/provider tests are not live-chain or extension validation. The successful builder retry supersedes earlier pending-Phantom statements.
+Gate evidence is reproducible from this repository: `pnpm test` (142 tests), `pnpm typecheck`, `pnpm lint`, `pnpm test:e2e` (18 browser tests) and `pnpm --filter @doppel/web build` all pass, and `apps/web/src/data/monitor-capture.json` records a real public-RPC mainnet capture. Synthetic history/provider tests are not live-chain or extension validation.
 
 ## Budget
 

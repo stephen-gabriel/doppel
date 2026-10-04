@@ -31,5 +31,25 @@ videos/**/.media/
 videos/**/renders/
 videos/**/snapshots/
 videos/**/.thumbnails/
-videos/**/assets/*.wav
+videos/**/*.wav
 videos/**/assets/vo/
+
+# Internal AI planning and tooling notes — not part of the submitted project.
+_build_plan/
+AGENTS.md
+CLAUDE.md
+.cursorrules
+.claude/
+
+# HyperFrames tool internals and scratch capture projects.
+videos/**/.hyperframes/
+videos/**/hyperframes.json
+videos/**/hyperframes.lock.json
+videos/**/capture/
+videos/**/capture-product/
+# Internal design scaffolding. BRIEF.md, SCRIPT.md and ASSETS_AND_NOTES.md stay
+# tracked as provenance for the narration and captured UI.
+videos/**/frame.md
+videos/**/STORYBOARD.md
+videos/**/audio_meta.json
+videos/**/assets/font-*.woff2
