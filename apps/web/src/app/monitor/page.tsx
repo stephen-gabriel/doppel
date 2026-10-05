@@ -36,7 +36,7 @@ export default function MonitorPage() {
   const openGaps = snapshot?.gaps.filter((gap) => gap.recoveredAt === null) ?? [];
   return <section className="space-y-5">
     <div>
-      <h1 className="text-[32px] leading-[38px] font-medium">Focused wallet monitor</h1>
+      <h1 className="text-display font-medium">Focused wallet monitor</h1>
       <p className="mt-3 text-muted">Follow suspicious lookalike activity for a small watchlist. This view shows exactly what the worker has processed—not all of Solana.</p>
     </div>
     <div role="status" className="rounded-[12px] border border-line bg-raised p-4">
@@ -82,7 +82,7 @@ export default function MonitorPage() {
         })}
       </div>
       <details className="rounded-[12px] border border-line p-4"><summary className="cursor-pointer text-iris">Pipeline health and counters</summary>
-        <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+        <dl className="mt-3 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
           <dt>Deliveries received</dt><dd>{snapshot.metrics.received}</dd>
           <dt>Out-of-scope events</dt><dd>{snapshot.metrics.ignored}</dd>
           <dt>Evicted events</dt><dd>{snapshot.metrics.evicted}</dd>

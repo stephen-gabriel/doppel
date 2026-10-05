@@ -36,9 +36,9 @@ export default function RecipientsPage() {
   }, []);
 
   return (
-    <section className="space-y-6">
-      <div className="rounded-[20px] border border-line bg-ink p-6">
-        <h1 className="text-[32px] leading-[38px] font-medium">Your address book</h1>
+    <section className="space-y-4 sm:space-y-6">
+      <div className="rounded-[20px] border border-line bg-ink p-4 sm:p-6">
+        <h1 className="text-display font-medium">Your address book</h1>
         <p className="mt-3 text-muted">
           Save the full address of someone you intend to pay, after getting it from a source you trust.
           Give it a name such as “Ada” or “My exchange.” Confirming saves your own verification; Doppel does not verify their identity.

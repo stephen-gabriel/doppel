@@ -56,8 +56,8 @@ export default function CheckPage() {
   const { snapshot, run, cancel } = useCheckCoordinator(draft, selected);
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-[12px] bg-raised p-5">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="rounded-[12px] bg-raised p-4 sm:p-5">
         <h2 className="text-xl font-medium">Start here: check an address without sending money</h2>
         <p className="mt-2 text-muted">Save an address you trust in your <Link href="/recipients" className="text-iris underline">address book</Link>,
           then compare it with the address you are about to pay. No wallet connection, SOL balance or transaction fee is needed.</p>
@@ -73,9 +73,9 @@ export default function CheckPage() {
           <Button variant="ghost" onClick={() => setExample(null)}>Close example</Button>
         </div> : null}
       </div>
-    <div className="grid gap-6 lg:grid-cols-12">
-      <section className="lg:col-span-5 rounded-[20px] border border-line bg-ink p-6">
-        <h1 className="text-[32px] leading-[38px] font-medium md:text-[48px] md:leading-[54px]">
+    <div className="grid gap-4 sm:gap-6 lg:grid-cols-12">
+      <section className="lg:col-span-5 rounded-[20px] border border-line bg-ink p-4 sm:p-6">
+        <h1 className="text-display font-medium">
           Check the recipient before you send.
         </h1>
         <p className="mt-3 text-muted">

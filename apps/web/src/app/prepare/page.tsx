@@ -176,7 +176,7 @@ export default function PreparePage() {
 
   return (
     <section className="space-y-5">
-      <h1 className="text-[32px] leading-[38px] font-medium">Try a payment with test funds</h1>
+      <h1 className="text-display font-medium">Try a payment with test funds</h1>
       <p className="text-muted">Practice the full flow: choose who you intend to pay, check the receiving address, then approve in your wallet.
         Just want to compare addresses? <Link href="/" className="text-iris underline">Use Check an address</Link>—no funds or wallet connection needed.</p>
       {cluster === "mainnet-beta" ? (

@@ -13,7 +13,7 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-midnight text-text">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-iris focus:p-3 focus:text-on-iris">Skip to content</a>
-      <header className="border-b border-line px-5 py-4 md:px-8">
+      <header className="border-b border-line px-4 py-4 sm:px-5 md:px-8">
         <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-3">
             <img src="/doppel-logo.svg" alt="" width={32} height={32} />
@@ -28,7 +28,7 @@ export function Shell({ children }: { children: ReactNode }) {
           </nav>
           <p className="text-right text-sm text-muted">Checks never move money</p>
         </div>
-        <nav aria-label="Mobile" className="mx-auto mt-3 flex max-w-[1120px] gap-4 overflow-x-auto md:hidden">
+        <nav aria-label="Mobile" className="mx-auto mt-3 flex max-w-[1120px] gap-3 overflow-x-auto sm:gap-4 md:hidden">
           {NAV.map((item) => (
             <Link key={item.href} href={item.href} className="shrink-0 py-2 text-muted">
               {item.label}
@@ -36,8 +36,8 @@ export function Shell({ children }: { children: ReactNode }) {
           ))}
         </nav>
       </header>
-      <main id="main-content" tabIndex={-1} className="mx-auto max-w-[1120px] px-5 py-8 md:px-8">{children}</main>
-      <footer className="border-t border-line px-5 py-6 text-sm text-muted md:px-8">
+      <main id="main-content" tabIndex={-1} className="mx-auto max-w-[1120px] px-4 py-6 sm:px-5 sm:py-8 md:px-8">{children}</main>
+      <footer className="border-t border-line px-4 py-6 text-sm text-muted sm:px-5 md:px-8">
         <p className="mx-auto max-w-[1120px]">
           Doppel compares the address you plan to pay with your saved recipient and looks for suspicious lookalikes.
           It does not verify who owns an address or guarantee safety.

@@ -2,8 +2,8 @@ import Link from "next/link";
 import { DEVNET_CIRCLE_USDC_MINT, MAINNET_USDC_MINT } from "@doppel/engine";
 
 export default function MethodPage() {
-  return <section className="rounded-[20px] border border-line bg-ink p-6 space-y-5">
-    <h1 className="text-[32px] leading-[38px] font-medium">How Doppel works</h1>
+  return <section className="rounded-[20px] border border-line bg-ink p-4 space-y-4 sm:p-6 sm:space-y-5">
+    <h1 className="text-display font-medium">How Doppel works</h1>
     <p>Imagine you pay Ada regularly. You save the address she confirmed, then compare it with the address you paste for your next payment.
       If someone planted a similar address in your history, Doppel helps you notice the difference.</p>
     <ol className="list-decimal space-y-3 pl-5">

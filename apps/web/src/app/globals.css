@@ -19,6 +19,10 @@
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
   --radius-control: 12px;
   --radius-panel: 20px;
+  --text-display: clamp(1.5rem, 1.02rem + 2.5vw, 3rem);
+  --text-display--line-height: 1.15;
+  --text-title: clamp(1.15rem, 1.02rem + 0.65vw, 1.5rem);
+  --text-title--line-height: 1.3;
 }
 
 html,
