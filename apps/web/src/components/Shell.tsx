@@ -1,5 +1,8 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NAV = [
   { href: "/", label: "Check an address" },
@@ -10,6 +13,10 @@ const NAV = [
 ];
 
 export function Shell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  useEffect(() => { setOpen(false); }, [pathname]);
+
   return (
     <div className="min-h-screen bg-midnight text-text">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-iris focus:p-3 focus:text-on-iris">Skip to content</a>
@@ -19,18 +26,37 @@ export function Shell({ children }: { children: ReactNode }) {
             <img src="/doppel-logo.svg" alt="" width={32} height={32} />
             <span className="text-[20px] font-medium">Doppel</span>
           </Link>
-          <nav aria-label="Primary" className="hidden gap-5 md:flex">
+          <nav aria-label="Primary" className="hidden gap-5 sm:flex">
             {NAV.map((item) => (
               <Link key={item.href} href={item.href} className="text-muted hover:text-text">
                 {item.label}
               </Link>
             ))}
           </nav>
-          <p className="text-right text-sm text-muted">Checks never move money</p>
+          <p className="hidden text-right text-sm text-muted lg:block">Checks never move money</p>
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="primary-menu"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[12px] border border-line-strong bg-raised text-text sm:hidden"
+          >
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            <span aria-hidden="true" className="flex flex-col gap-[5px]">
+              <span className={`block h-[2px] w-5 rounded bg-current transition-transform ${open ? "translate-y-[7px] rotate-45" : ""}`} />
+              <span className={`block h-[2px] w-5 rounded bg-current transition-opacity ${open ? "opacity-0" : ""}`} />
+              <span className={`block h-[2px] w-5 rounded bg-current transition-transform ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
+            </span>
+          </button>
         </div>
-        <nav aria-label="Mobile" className="mx-auto mt-3 flex max-w-[1120px] gap-3 overflow-x-auto sm:gap-4 md:hidden">
+        <nav
+          id="primary-menu"
+          aria-label="Mobile"
+          hidden={!open}
+          className="mx-auto mt-3 flex max-w-[1120px] flex-col gap-1 sm:hidden"
+        >
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="shrink-0 py-2 text-muted">
+            <Link key={item.href} href={item.href} className="rounded-[12px] px-3 py-3 text-muted">
               {item.label}
             </Link>
           ))}
