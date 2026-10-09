@@ -24,40 +24,11 @@ worker-data/
 tsconfig.tsbuildinfo
 test-results/
 playwright-report/
-videos/**/.hyperframes/preview/
-videos/**/.media/
-# Generated demo-video media: reproducible from videos/<project>/scripts, too large for git.
-# The composition HTML, scripts, notes and captured UI stills stay tracked.
-videos/**/renders/
-videos/**/snapshots/
-videos/**/.thumbnails/
-videos/**/*.wav
-videos/**/assets/vo/
 
-# Internal AI planning and tooling notes — not part of the submitted project.
+# Internal demo-video projects and AI planning/tooling notes — not part of the submission.
+videos/
 _build_plan/
 AGENTS.md
 CLAUDE.md
 .cursorrules
 .claude/
-
-# HyperFrames tool internals and scratch capture projects.
-videos/**/.hyperframes/
-videos/**/hyperframes.json
-videos/**/hyperframes.lock.json
-videos/**/capture/
-videos/**/capture-product/
-# Internal design scaffolding. BRIEF.md, SCRIPT.md and ASSETS_AND_NOTES.md stay
-# tracked as provenance for the narration and captured UI.
-videos/**/frame.md
-videos/**/STORYBOARD.md
-videos/**/audio_meta.json
-videos/**/assets/font-*.woff2
-
-# Render/verification scratch. Regenerable on demand, never part of a submission:
-#   render_log.txt  per-render frame log
-#   zoom/           `hyperframes snapshot --zoom` element crops used for QC
-#   verify/         throwaway frame dumps written by ad-hoc measurement scripts
-videos/**/render_log.txt
-videos/**/zoom/
-videos/**/verify/
